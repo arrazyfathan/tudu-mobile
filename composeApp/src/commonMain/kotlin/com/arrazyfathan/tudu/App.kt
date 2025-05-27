@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -25,6 +26,19 @@ import tudu.composeapp.generated.resources.compose_multiplatform
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
+        var text by remember { mutableStateOf("Loading") }
+        val coroutineScope = rememberCoroutineScope()
+
+        LaunchedEffect(true) {
+            coroutineScope.launch {
+                text = try {
+                    Greeting().greet()
+                } catch (e: Exception) {
+                    e.message ?: "error"
+                }
+            }
+        }
+
         Column(
             modifier = Modifier
                 .background(Color.White)
@@ -36,10 +50,9 @@ fun App() {
                 Text("Click me baby!")
             }
             AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    Text("Compose: $text")
                 }
             }
         }
