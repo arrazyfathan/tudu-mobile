@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.arrazyfathan.tudu.utils.AppLogger
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -40,13 +41,13 @@ fun App() {
         }
 
         Column(
-            modifier = Modifier
-                .background(Color.White)
-                .safeContentPadding()
-                .fillMaxSize(),
+            modifier = Modifier.background(Color.White).safeContentPadding().fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Button(onClick = { showContent = !showContent }) {
+            Button(onClick = {
+                showContent = !showContent
+                AppLogger.d("App", "example logger")
+            }) {
                 Text("Click me baby!")
             }
             AnimatedVisibility(showContent) {
