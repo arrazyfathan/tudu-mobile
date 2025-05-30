@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -57,9 +58,16 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation(libs.ktor.client.core)
-
-            implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.jetbrains.compose.navigation)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            api(libs.koin.core)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.coil)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -70,6 +78,7 @@ kotlin {
 
             implementation(libs.ktor.client.cio)
         }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
