@@ -1,5 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -9,6 +8,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.google.gms.googleService)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 kotlin {
@@ -47,6 +48,10 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
+            implementation(libs.firebase.crashlytics)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

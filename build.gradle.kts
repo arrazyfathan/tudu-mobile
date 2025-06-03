@@ -5,4 +5,6 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.composeHotReload) apply false
+    alias(libs.plugins.google.gms.googleService) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
 }
