@@ -1,5 +1,7 @@
-package com.arrazyfathan.tudu.core.domain
+package com.arrazyfathan.tudu.core.data
 
+import com.arrazyfathan.tudu.core.domain.DataError
+import com.arrazyfathan.tudu.core.domain.Result
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.SocketTimeoutException
