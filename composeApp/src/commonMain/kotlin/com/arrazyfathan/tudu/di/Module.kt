@@ -7,13 +7,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 expect val platformModule: Module
 expect val preferencesModule: Module
 
 val dispatcherModule = module {
-    single<CoroutineDispatcher> { Dispatchers.IO }
+    single<CoroutineDispatcher>(qualifier = named("io")) { Dispatchers.IO }
 }
 
 val sharedModule = module {
@@ -22,6 +23,6 @@ val sharedModule = module {
     }
 
     single<PreferencesManager> {
-        PreferencesManagerImpl(get(), get())
+        PreferencesManagerImpl(get(), get(named("io")))
     }
 }
