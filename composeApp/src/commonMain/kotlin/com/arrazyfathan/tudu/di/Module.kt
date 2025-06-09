@@ -5,7 +5,7 @@ import com.arrazyfathan.tudu.core.preferences.AuthPreferences
 import com.arrazyfathan.tudu.core.preferences.AuthPreferencesImpl
 import com.arrazyfathan.tudu.core.preferences.PreferencesManager
 import com.arrazyfathan.tudu.core.preferences.PreferencesManagerImpl
-import com.arrazyfathan.tudu.onboarding.presentation.OnboardingViewModel
+import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

@@ -1,4 +1,4 @@
-package com.arrazyfathan.tudu.onboarding.presentation
+package com.arrazyfathan.tudu.features.onboarding.presentation
 
 import com.arrazyfathan.tudu.core.presentation.UiText
 

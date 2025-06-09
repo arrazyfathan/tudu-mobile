@@ -1,4 +1,4 @@
-package com.arrazyfathan.tudu.onboarding.presentation
+package com.arrazyfathan.tudu.features.onboarding.presentation
 
 import androidx.lifecycle.ViewModel
 import com.arrazyfathan.tudu.core.preferences.AuthPreferences

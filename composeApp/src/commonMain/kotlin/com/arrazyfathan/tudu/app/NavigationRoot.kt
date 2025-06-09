@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.arrazyfathan.tudu.onboarding.presentation.OnboardingScreen
+import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingScreen
 
 @Composable
 fun NavigationRoot(

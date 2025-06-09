@@ -1,4 +1,4 @@
-package com.arrazyfathan.tudu.onboarding.presentation
+package com.arrazyfathan.tudu.features.onboarding.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
