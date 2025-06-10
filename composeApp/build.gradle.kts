@@ -24,9 +24,7 @@ kotlin {
     }
 
     listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
+        iosX64(), iosArm64(), iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -131,8 +129,24 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.arrazyfathan.tudu"
+            packageName = "Tudu"
             packageVersion = "1.0.0"
+            description = "Compose Multiplatform App"
+            copyright = "© 2024 Ar Razy Fathan Rabbani. All rights reserved."
+            vendor = "Ar Razy Fathan Rabbani"
+            licenseFile.set(project.file("LICENSE.txt"))
+
+            macOS {
+                iconFile.set(project.file("resources/mac_icon.icns"))
+            }
+
+            windows {
+                iconFile.set(project.file("resources/windows_icon.ico"))
+            }
+
+            linux {
+                iconFile.set(project.file("resources/linux_icon.png"))
+            }
         }
     }
 }
