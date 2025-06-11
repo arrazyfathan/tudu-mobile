@@ -9,4 +9,10 @@ sealed interface Routes {
 
     @Serializable
     data object Onboarding : Routes
+
+    @Serializable
+    data object AuthGraph : Routes
+
+    @Serializable
+    data object Auth : Routes
 }

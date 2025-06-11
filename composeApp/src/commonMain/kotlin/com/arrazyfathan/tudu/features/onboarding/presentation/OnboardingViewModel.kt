@@ -12,7 +12,7 @@ class OnboardingViewModel(
     private val _state = MutableStateFlow(OnboardingState())
     val state = _state.asStateFlow()
 
-    fun onAction(action: OnboardingAction) {
+    fun onEvent(action: OnboardingEvent) {
     }
 
 }

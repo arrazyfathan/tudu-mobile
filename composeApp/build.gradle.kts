@@ -76,6 +76,8 @@ kotlin {
 
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
+
+            implementation(libs.feather)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -117,6 +119,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        compose = true
     }
 }
 

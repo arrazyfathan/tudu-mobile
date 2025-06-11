@@ -9,6 +9,7 @@ fun main() {
     initKoin()
     application {
         Window(
+            alwaysOnTop = true,
             onCloseRequest = ::exitApplication,
             title = "Tudu",
         ) {

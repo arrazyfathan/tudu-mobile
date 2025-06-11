@@ -20,7 +20,7 @@ struct ContentView: View {
   var body: some View {
     ZStack {
       if isHomeRootScreen {
-        ComposeView()
+          ComposeView().ignoresSafeArea(.all)
       } else {
         Image(.tuduLogo)
         .resizable()

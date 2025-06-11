@@ -13,6 +13,7 @@ androidx-testExt = "1.2.1"
 compose-hot-reload = "1.0.0-alpha10"
 compose-multiplatform = "1.8.1"
 core-splash-screen = "1.0.1"
+feather = "1.1.1"
 firebase-bom = "33.14.0"
 junit = "4.13.2"
 kotlin = "2.1.21"
@@ -28,6 +29,7 @@ data-store = "1.1.7"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splash-screen" }
+feather = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "feather" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
