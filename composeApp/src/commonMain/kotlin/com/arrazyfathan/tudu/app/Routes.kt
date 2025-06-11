@@ -15,4 +15,10 @@ sealed interface Routes {
 
     @Serializable
     data object Auth : Routes
+
+    @Serializable
+    data object HomeGraph : Routes
+
+    @Serializable
+    data object Home : Routes
 }

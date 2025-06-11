@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -34,7 +34,5 @@ val sharedModule = module {
         AuthPreferencesImpl(get(), get(named("io")))
     }
 
-    viewModel {
-        OnboardingViewModel(get())
-    }
+    viewModelOf(::OnboardingViewModel)
 }

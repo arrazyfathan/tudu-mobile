@@ -6,15 +6,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,25 +39,21 @@ fun OnboardingScreen(
     onNext: () -> Unit
 ) {
     val viewModel = koinViewModel<OnboardingViewModel>()
-    val state = viewModel.state.collectAsState()
 
     OnboardingContent(
-        state = state.value,
-        onEvent = viewModel::onEvent,
-        onNext = onNext
+        onEvent = viewModel::onEvent, onNext = onNext
     )
 }
 
 @Composable
 fun OnboardingContent(
-    state: OnboardingState,
     onEvent: (OnboardingEvent) -> Unit,
     onNext: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.fillMaxSize().background(Color.White)
-            .padding(vertical = 16.dp, horizontal = 16.dp),
+            .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -64,9 +63,11 @@ fun OnboardingContent(
             Text(
                 text = "Discover and capture beauty in your life",
                 fontSize = 34.sp,
-                lineHeight = 30.sp,
+                lineHeight = 38.sp,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
+                modifier = Modifier.padding(24.dp)
             )
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -80,7 +81,10 @@ fun OnboardingContent(
 
         OnboardingButton(
             text = "Let's Go",
-            onClick = onNext,
+            onClick = {
+                onEvent(OnboardingEvent.OnSkipOnboarding)
+                onNext()
+            },
             style = OnboardingButtonStyle(
                 customIcon = {
                     Icon(
@@ -94,7 +98,8 @@ fun OnboardingContent(
                 pressedColor = Color.Black.copy(alpha = 0.7f),
                 fontSize = 14.sp
             ),
-            modifier = Modifier.width(200.dp).align(Alignment.BottomEnd),
+            modifier = Modifier.width(200.dp).align(Alignment.BottomEnd)
+                .padding(bottom = 24.dp, end = 24.dp),
         )
     }
 }
@@ -103,7 +108,6 @@ fun OnboardingContent(
 @Composable
 fun OnboardingScreenPreview() {
     OnboardingContent(
-        state = OnboardingState(),
         onEvent = {},
         onNext = {},
         modifier = Modifier.background(Color.White),

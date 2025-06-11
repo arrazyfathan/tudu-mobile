@@ -2,11 +2,13 @@ package com.arrazyfathan.tudu.core.preferences
 
 import PreferencesKeys
 import PrefsDataStore
+import androidx.compose.runtime.Composable
 import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import org.koin.compose.koinInject
 
 class AuthPreferencesImpl(
     private val dataStore: PrefsDataStore, private val ioDispatcher: CoroutineDispatcher
@@ -27,4 +29,9 @@ class AuthPreferencesImpl(
             }
         }
     }
+}
+
+@Composable
+fun rememberAuthPreference(): AuthPreferences {
+    return koinInject()
 }
