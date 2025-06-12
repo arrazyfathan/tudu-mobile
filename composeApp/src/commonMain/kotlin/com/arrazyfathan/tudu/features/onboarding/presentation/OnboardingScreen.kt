@@ -63,8 +63,7 @@ fun OnboardingContent(
             Text(
                 text = "Discover and capture beauty in your life",
                 fontSize = 34.sp,
-                lineHeight = 38.sp,
-                style = MaterialTheme.typography.titleLarge,
+                lineHeight = 38.sp, style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
                 modifier = Modifier.padding(24.dp)
