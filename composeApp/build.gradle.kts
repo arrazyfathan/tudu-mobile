@@ -1,5 +1,7 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -11,6 +13,18 @@ plugins {
     alias(libs.plugins.google.gms.googleService)
     alias(libs.plugins.firebase.crashlytics)
 }
+
+val versionPropertiesInputStream = FileInputStream("$rootDir/version.properties")
+val versionProperties = Properties().apply {
+    load(versionPropertiesInputStream)
+}
+
+val versionCodeProperty = versionProperties.getProperty("VERSION_CODE").toInt()
+val versionMajorProperty = versionProperties.getProperty("VERSION_MAJOR").toInt()
+val versionMinorProperty = versionProperties.getProperty("VERSION_MINOR").toInt()
+val versionPatchProperty = versionProperties.getProperty("VERSION_PATCH").toInt()
+
+val versionNameProperty = "$versionMajorProperty.$versionMinorProperty.$versionPatchProperty"
 
 kotlin {
     compilerOptions {
@@ -103,8 +117,8 @@ android {
         applicationId = "com.arrazyfathan.tudu"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = versionCodeProperty
+        versionName = versionNameProperty
     }
     packaging {
         resources {
@@ -137,13 +151,15 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Tudu"
-            packageVersion = "1.0.0"
+            packageVersion = versionNameProperty
             description = "Compose Multiplatform App"
             copyright = "© 2024 Ar Razy Fathan Rabbani. All rights reserved."
             vendor = "Ar Razy Fathan Rabbani"
             licenseFile.set(project.file("LICENSE.txt"))
 
             macOS {
+                dockName = "Tudu"
+                entitlementsFile.set(project.file("default.entitlements"))
                 iconFile.set(project.file("resources/mac_icon.icns"))
             }
 
@@ -153,6 +169,13 @@ compose.desktop {
 
             linux {
                 iconFile.set(project.file("resources/linux_icon.png"))
+            }
+        }
+
+        buildTypes.release {
+            proguard {
+                obfuscate.set(true)
+                configurationFiles.from("proguard-rules.pro")
             }
         }
     }
