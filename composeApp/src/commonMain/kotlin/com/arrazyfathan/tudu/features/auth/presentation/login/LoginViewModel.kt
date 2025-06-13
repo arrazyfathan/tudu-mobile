@@ -6,8 +6,10 @@ import com.arrazyfathan.tudu.core.domain.utils.onError
 import com.arrazyfathan.tudu.core.domain.utils.onSuccess
 import com.arrazyfathan.tudu.core.presentation.toErrorMessage
 import com.arrazyfathan.tudu.features.auth.domain.usecase.LoginUseCase
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -17,10 +19,19 @@ class LoginViewModel(
     private val _state = MutableStateFlow(LoginState())
     val state = _state.asStateFlow()
 
-    fun onEvent(event: LoginEvent) {
-        when (event) {
-            is LoginEvent.OnLogin -> {
-                login()
+    private val eventChannel = Channel<LoginEvent>()
+    val events = eventChannel.receiveAsFlow()
+
+    fun onAction(action: LoginAction) {
+        when (action) {
+            is LoginAction.OnLogin -> login()
+
+            is LoginAction.OnPasswordChange -> {
+                _state.update { it.copy(password = action.password) }
+            }
+
+            is LoginAction.OnUsernameChange -> {
+                _state.update { it.copy(username = action.username) }
             }
         }
     }
@@ -30,8 +41,8 @@ class LoginViewModel(
         viewModelScope.launch {
             loginUseCase(
                 LoginUseCase.Request(
-                    username = "",
-                    password = "",
+                    username = _state.value.username,
+                    password = _state.value.password,
                 ),
             ).onSuccess { user ->
                 _state.update {
@@ -40,6 +51,7 @@ class LoginViewModel(
                         isLoading = false,
                     )
                 }
+                eventChannel.send(LoginEvent.LoginSuccess)
             }.onError { error ->
                 val message = error.toErrorMessage()
                 _state.update {
@@ -48,6 +60,7 @@ class LoginViewModel(
                         isLoading = false,
                     )
                 }
+                eventChannel.send(LoginEvent.Error(message))
             }
         }
     }

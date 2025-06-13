@@ -6,14 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,13 +32,12 @@ import tudu.composeapp.generated.resources.Res
 import tudu.composeapp.generated.resources.bg_onboarding
 
 @Composable
-fun OnboardingScreen(
-    onNext: () -> Unit
-) {
+fun OnboardingScreen(onNext: () -> Unit) {
     val viewModel = koinViewModel<OnboardingViewModel>()
 
     OnboardingContent(
-        onEvent = viewModel::onEvent, onNext = onNext
+        onEvent = viewModel::onEvent,
+        onNext = onNext,
     )
 }
 
@@ -52,8 +48,7 @@ fun OnboardingContent(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.fillMaxSize().background(Color.White)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
+        modifier = modifier.fillMaxSize().background(Color.White),
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -63,10 +58,11 @@ fun OnboardingContent(
             Text(
                 text = "Discover and capture beauty in your life",
                 fontSize = 34.sp,
-                lineHeight = 38.sp, style = MaterialTheme.typography.titleLarge,
+                lineHeight = 38.sp,
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Medium,
                 color = Color.Black,
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(24.dp),
             )
 
             Spacer(modifier = Modifier.height(50.dp))
@@ -84,21 +80,25 @@ fun OnboardingContent(
                 onEvent(OnboardingEvent.OnSkipOnboarding)
                 onNext()
             },
-            style = OnboardingButtonStyle(
-                customIcon = {
-                    Icon(
-                        imageVector = FeatherIcons.ArrowRight,
-                        contentDescription = "Next",
-                        tint = Color.White,
-                        modifier = Modifier.size(20.dp)
-                    )
-                },
-                normalColor = Color.Black,
-                pressedColor = Color.Black.copy(alpha = 0.7f),
-                fontSize = 14.sp
-            ),
-            modifier = Modifier.width(200.dp).align(Alignment.BottomEnd)
-                .padding(bottom = 24.dp, end = 24.dp),
+            style =
+                OnboardingButtonStyle(
+                    customIcon = {
+                        Icon(
+                            imageVector = FeatherIcons.ArrowRight,
+                            contentDescription = "Next",
+                            tint = Color.White,
+                            modifier = Modifier.size(20.dp),
+                        )
+                    },
+                    normalColor = Color.Black,
+                    pressedColor = Color.Black.copy(alpha = 0.7f),
+                    fontSize = 14.sp,
+                ),
+            modifier =
+                Modifier
+                    .width(200.dp)
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 24.dp, end = 24.dp),
         )
     }
 }

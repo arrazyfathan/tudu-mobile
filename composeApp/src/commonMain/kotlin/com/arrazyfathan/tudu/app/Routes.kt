@@ -3,7 +3,6 @@ package com.arrazyfathan.tudu.app
 import kotlinx.serialization.Serializable
 
 sealed interface Routes {
-
     @Serializable
     data object OnboardingGraph : Routes
 
@@ -14,7 +13,10 @@ sealed interface Routes {
     data object AuthGraph : Routes
 
     @Serializable
-    data object Auth : Routes
+    data object Login : Routes
+
+    @Serializable
+    data object Register : Routes
 
     @Serializable
     data object HomeGraph : Routes
