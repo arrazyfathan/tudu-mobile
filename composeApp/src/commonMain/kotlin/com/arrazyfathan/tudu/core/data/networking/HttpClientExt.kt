@@ -1,6 +1,7 @@
 package com.arrazyfathan.tudu.core.data.networking
 
 import com.arrazyfathan.tudu.core.domain.utils.DataError
+import com.arrazyfathan.tudu.core.domain.utils.ErrorResponse
 import com.arrazyfathan.tudu.core.domain.utils.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
@@ -20,11 +21,13 @@ import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
 
 const val BASE_URL = "http://10.0.2.2:3000"
+const val BASE_URL2 = "http://localhost:3000"
 
 suspend inline fun <reified Response : Any> HttpClient.get(
-    route: String, queryParameters: Map<String, Any?> = mapOf()
-): Result<Response, DataError> {
-    return safeCall {
+    route: String,
+    queryParameters: Map<String, Any?> = mapOf(),
+): Result<Response, DataError> =
+    safeCall {
         get {
             url(constructRoute(route))
             queryParameters.forEach { (key, value) ->
@@ -32,24 +35,23 @@ suspend inline fun <reified Response : Any> HttpClient.get(
             }
         }
     }
-}
 
 suspend inline fun <reified Request, reified Response : Any> HttpClient.post(
-    route: String, body: Request
-): Result<Response, DataError> {
-    return safeCall {
+    route: String,
+    body: Request,
+): Result<Response, DataError> =
+    safeCall {
         post {
             url(constructRoute(route))
             setBody(body)
         }
     }
-}
-
 
 suspend inline fun <reified Response : Any> HttpClient.delete(
-    route: String, queryParameters: Map<String, Any?> = mapOf()
-): Result<Response, DataError> {
-    return safeCall {
+    route: String,
+    queryParameters: Map<String, Any?> = mapOf(),
+): Result<Response, DataError> =
+    safeCall {
         delete {
             url(constructRoute(route))
             queryParameters.forEach { (key, value) ->
@@ -57,41 +59,41 @@ suspend inline fun <reified Response : Any> HttpClient.delete(
             }
         }
     }
-}
 
 suspend inline fun <reified Request, reified Response : Any> HttpClient.put(
-    route: String, body: Request
-): Result<Response, DataError> {
-    return safeCall {
+    route: String,
+    body: Request,
+): Result<Response, DataError> =
+    safeCall {
         put {
             url(constructRoute(route))
             setBody(body)
         }
     }
-}
 
 suspend inline fun <reified Request, reified Response : Any> HttpClient.patch(
-    route: String, body: Request
-): Result<Response, DataError> {
-    return safeCall {
+    route: String,
+    body: Request,
+): Result<Response, DataError> =
+    safeCall {
         patch {
             url(constructRoute(route))
             setBody(body)
         }
     }
-}
 
 suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): Result<T, DataError> {
-    val response = try {
-        execute()
-    } catch (e: SocketTimeoutException) {
-        return Result.Error(DataError.RequestTimeoutError(e.message.toString()))
-    } catch (e: UnresolvedAddressException) {
-        return Result.Error(DataError.NetworkError(e.message.toString()))
-    } catch (e: Exception) {
-        coroutineContext.ensureActive()
-        return Result.Error(DataError.UnknownError(e.message.toString()))
-    }
+    val response =
+        try {
+            execute()
+        } catch (e: SocketTimeoutException) {
+            return Result.Error(DataError.RequestTimeoutError)
+        } catch (e: UnresolvedAddressException) {
+            return Result.Error(DataError.NetworkError)
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            return Result.Error(DataError.UnknownError)
+        }
 
     return responseToResult(response)
 }
@@ -103,21 +105,42 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
             try {
                 Result.Success(responseBody)
             } catch (e: NoTransformationFoundException) {
-                Result.Error(DataError.SerializationError(e.message))
+                Result.Error(DataError.SerializationError)
             }
         }
 
-        408 -> Result.Error(DataError.RequestTimeoutError("Request Timeout"))
-        429 -> Result.Error(DataError.TooManyRequestError("Too Many Request"))
-        in 500..599 -> Result.Error(DataError.ServerError("Server Error", code))
-        else -> Result.Error(DataError.UnknownError("Unknown Error"))
+        400 -> {
+            try {
+                val errorResponse = response.body<ErrorResponse>()
+                if (errorResponse.errors != null) {
+                    Result.Error(DataError.ValidationError(errorResponse.errors))
+                } else {
+                    Result.Error(DataError.Client(errorResponse.message, code))
+                }
+            } catch (e: Exception) {
+                Result.Error(DataError.SerializationError)
+            }
+        }
+
+        408 -> Result.Error(DataError.RequestTimeoutError)
+        429 -> Result.Error(DataError.TooManyRequestError)
+        in 401..499 -> {
+            try {
+                val errorResponse = response.body<ErrorResponse>()
+                Result.Error(DataError.Client(errorResponse.message, code))
+            } catch (e: Exception) {
+                Result.Error(DataError.SerializationError)
+            }
+        }
+        401 -> Result.Error(DataError.Unauthorized)
+        in 500..599 -> Result.Error(DataError.ServerError)
+        else -> Result.Error(DataError.UnknownError)
     }
 }
 
-fun constructRoute(route: String): String {
-    return when {
+fun constructRoute(route: String): String =
+    when {
         route.contains(BASE_URL) -> route
         route.startsWith("/") -> BASE_URL + route
         else -> "$BASE_URL/$route"
     }
-}

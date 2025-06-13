@@ -7,16 +7,12 @@ import com.arrazyfathan.tudu.features.auth.domain.model.User
 import com.arrazyfathan.tudu.features.auth.domain.repository.AuthenticationRepository
 
 class LoginUseCase(
-    private val repository: AuthenticationRepository
+    private val repository: AuthenticationRepository,
 ) : UseCase<LoginUseCase.Request, User> {
-
     data class Request(
-        val username: String, val password: String
+        val username: String,
+        val password: String,
     )
 
-    override suspend fun invoke(request: Request): Result<User, DataError> {
-        return repository.login(request.username, request.password)
-    }
-
-
+    override suspend fun invoke(request: Request): Result<User?, DataError> = repository.login(request.username, request.password)
 }

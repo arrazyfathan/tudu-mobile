@@ -2,14 +2,20 @@ package com.arrazyfathan.tudu.features.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arrazyfathan.tudu.core.domain.utils.Result
+import com.arrazyfathan.tudu.core.domain.utils.onError
+import com.arrazyfathan.tudu.core.domain.utils.onSuccess
+import com.arrazyfathan.tudu.core.presentation.toErrorMessage
 import com.arrazyfathan.tudu.features.auth.domain.usecase.LoginUseCase
-import com.arrazyfathan.tudu.utils.AppLogger
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
 ) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state = _state.asStateFlow()
 
     fun onEvent(event: LoginEvent) {
         when (event) {
@@ -20,23 +26,29 @@ class LoginViewModel(
     }
 
     private fun login() {
+        _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
-            val result = loginUseCase(
+            loginUseCase(
                 LoginUseCase.Request(
-                    username = "razy",
-                    password = "qiqiq"
-                )
-            )
-
-            when (result) {
-                is Result.Error -> {
-                    AppLogger.d("ApiLogger", result.error.toString())
+                    username = "",
+                    password = "",
+                ),
+            ).onSuccess { user ->
+                _state.update {
+                    it.copy(
+                        user = user,
+                        isLoading = false,
+                    )
                 }
-
-                is Result.Success -> {
+            }.onError { error ->
+                val message = error.toErrorMessage()
+                _state.update {
+                    it.copy(
+                        errorMessage = message,
+                        isLoading = false,
+                    )
                 }
             }
         }
     }
-
 }

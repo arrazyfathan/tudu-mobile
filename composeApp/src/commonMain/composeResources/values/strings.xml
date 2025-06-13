@@ -8,4 +8,7 @@
     <string name="error_serialization">Couldn't parse data</string>
     <string name="error_too_many_request">Your request is too many, please try again later.</string>
     <string name="error_http">Something went wrong</string>
+    <string name="error_client">Something went wrong</string>
+    <string name="error_unauthorized">Unauthorized</string>
+    <string name="error_validation">Validation failed</string>
 </resources>

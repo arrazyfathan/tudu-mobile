@@ -15,22 +15,31 @@ import io.ktor.client.HttpClient
 class AuthenticationRepositoryImpl(
     private val httpClient: HttpClient,
 ) : AuthenticationRepository {
-    override suspend fun login(username: String, password: String): Result<User, DataError> {
-        val result = httpClient.post<LoginRequestDto, ApiResponse<LoginResponseDto>>(
-            route = "/api/auth/login", body = LoginRequestDto(
-                username = username, password = password
+    override suspend fun login(
+        username: String,
+        password: String,
+    ): Result<User?, DataError> {
+        val result =
+            httpClient.post<LoginRequestDto, ApiResponse<LoginResponseDto>>(
+                route = "/api/auth/login",
+                body =
+                    LoginRequestDto(
+                        username = username,
+                        password = password,
+                    ),
             )
-        )
 
         if (result is Result.Success) {
-
         }
 
-        return result.map { it.data.toUser() }
+        return result.map { it.data?.toUser() }
     }
 
     override suspend fun register(
-        username: String, password: String, email: String, name: String
+        username: String,
+        password: String,
+        email: String,
+        name: String,
     ): Result<String, DataError> {
         TODO("Not yet implemented")
     }

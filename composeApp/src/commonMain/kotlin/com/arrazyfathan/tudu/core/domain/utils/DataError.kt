@@ -1,16 +1,31 @@
 package com.arrazyfathan.tudu.core.domain.utils
 
 sealed class DataError(
-    open val message: String, open val code: Int? = null
+    open val message: String? = null,
+    open val code: Int? = null,
 ) : Error {
-    data class Http(override val message: String, override val code: Int) : DataError(message, code)
-    data class ServerError(override val message: String, override val code: Int) :
-        DataError(message, code)
+    data class Client(
+        override val message: String,
+        override val code: Int,
+    ) : DataError(message, code)
 
-    data class NetworkError(override val message: String) : DataError(message)
-    data class SerializationError(override val message: String) : DataError(message)
-    data class RequestTimeoutError(override val message: String) : DataError(message)
-    data class TooManyRequestError(override val message: String) : DataError(message)
-    data class DiskFullError(override val message: String) : DataError(message)
-    data class UnknownError(override val message: String) : DataError(message)
+    data class ValidationError(
+        val errors: Map<String, String>,
+    ) : DataError("Validation failed", 400)
+
+    data object Unauthorized : DataError()
+
+    data object ServerError : DataError()
+
+    data object NetworkError : DataError()
+
+    data object SerializationError : DataError()
+
+    data object RequestTimeoutError : DataError()
+
+    data object TooManyRequestError : DataError()
+
+    data object DiskFullError : DataError()
+
+    data object UnknownError : DataError()
 }
