@@ -1,8 +1,10 @@
-package com.arrazyfathan.tudu.core.domain
+package com.arrazyfathan.tudu.core.domain.utils
+
+import kotlinx.serialization.Serializable
 
 sealed interface Result<out D, out E : Error> {
     data class Success<out D>(val data: D) : Result<D, Nothing>
-    data class Error<out E : com.arrazyfathan.tudu.core.domain.Error>(val error: E) :
+    data class Error<out E : com.arrazyfathan.tudu.core.domain.utils.Error>(val error: E) :
         Result<Nothing, E>
 }
 
@@ -17,7 +19,7 @@ fun <T, E : Error> Result<T, E>.asEmptyDataResult(): EmptyResult<E> {
     return map { }
 }
 
-inline fun <T, E : Error> Result<T, E>.onSuccess(action: (T) -> Unit): Result<T, E> {
+inline fun <T, E : Error> Result<T, E>.onSuccess(action: (T?) -> Unit): Result<T, E> {
     return when (this) {
         is Result.Error -> this
         is Result.Success -> {
@@ -39,3 +41,18 @@ inline fun <T, E : Error> Result<T, E>.onError(action: (E) -> Unit): Result<T, E
 }
 
 typealias EmptyResult<E> = Result<Unit, E>
+
+
+@Serializable
+data class ApiResponse<out T>(
+    val status: String,
+    val message: String,
+    val data: T
+)
+
+@Serializable
+data class CommonResponse(
+    val status: String,
+    val message: String,
+)
+

@@ -1,13 +1,12 @@
-package com.arrazyfathan.tudu.core.data
+package com.arrazyfathan.tudu.core.data.networking
 
-import com.arrazyfathan.tudu.utils.AppLogger
+import com.arrazyfathan.tudu.utils.PrettyLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -22,21 +21,16 @@ object HttpClientFactory {
                 json(
                     json = Json {
                         ignoreUnknownKeys = true
-                    }
-                )
+                    })
 
 
             }
             install(HttpTimeout) {
-                socketTimeoutMillis = 20_000L
-                requestTimeoutMillis = 20_000L
+                socketTimeoutMillis = 60_000L
+                requestTimeoutMillis = 60_000L
             }
             install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        AppLogger.d("HttpLogger", message)
-                    }
-                }
+                logger = PrettyLogger
                 level = LogLevel.ALL
             }
             defaultRequest {
