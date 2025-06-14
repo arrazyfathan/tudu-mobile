@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.arrazyfathan.tudu.app.navigation.NavigationRoot
+import com.arrazyfathan.tudu.app.navigation.Routes
 import com.arrazyfathan.tudu.core.ui.AppColors
 import com.arrazyfathan.tudu.core.ui.TuduTheme
 import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingViewModel

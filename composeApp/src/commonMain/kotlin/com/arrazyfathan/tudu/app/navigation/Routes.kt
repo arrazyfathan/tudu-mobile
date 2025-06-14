@@ -1,4 +1,4 @@
-package com.arrazyfathan.tudu.app
+package com.arrazyfathan.tudu.app.navigation
 
 import kotlinx.serialization.Serializable
 
