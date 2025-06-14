@@ -12,9 +12,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val preferencesManager: PreferencesManager, private val authPreferences: AuthPreferences
+    private val preferencesManager: PreferencesManager,
+    private val authPreferences: AuthPreferences,
 ) : ViewModel() {
-
     private val _state = MutableStateFlow(OnboardingState())
     val state = _state.asStateFlow()
 
@@ -24,12 +24,11 @@ class OnboardingViewModel(
             _state.update { state ->
                 state.copy(
                     isAuthenticated = authPreferences.isAuthenticate.first(),
-                    isFirstTime = preferencesManager.isFirstTime.first()
+                    isFirstTime = preferencesManager.isFirstTime.first(),
                 )
             }
             _state.update { state -> state.copy(isChecking = false) }
         }
-
     }
 
     fun onEvent(action: OnboardingEvent) {
@@ -38,7 +37,6 @@ class OnboardingViewModel(
                 changeOnboardingStatus()
             }
         }
-
     }
 
     private fun changeOnboardingStatus() {
@@ -46,5 +44,4 @@ class OnboardingViewModel(
             preferencesManager.setIsFirstTime(false)
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.arrazyfathan.tudu.features.auth.data.dto
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,13 +14,13 @@ data class LoginResponseDto(
     @SerialName("token")
     val token: Token? = null,
     @SerialName("username")
-    val username: String? = null
+    val username: String? = null,
 ) {
     @Serializable
     data class Token(
         @SerialName("access_token")
         val accessToken: String? = null,
         @SerialName("refresh_token")
-        val refreshToken: String? = null
+        val refreshToken: String? = null,
     )
 }

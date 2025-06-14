@@ -8,10 +8,12 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 actual val platformModule: Module
-    get() = module {
-        single<HttpClientEngine> { CIO.create() }
-    }
+    get() =
+        module {
+            single<HttpClientEngine> { CIO.create() }
+        }
 actual val preferencesModule: Module
-    get() = module {
-        single { createDataStore { DATA_STORE_FILE_NAME } }
-    }
+    get() =
+        module {
+            single { createDataStore { DATA_STORE_FILE_NAME } }
+        }

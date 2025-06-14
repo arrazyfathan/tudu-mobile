@@ -7,11 +7,13 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 actual val platformModule: Module
-    get() = module {
-        single<HttpClientEngine> { Darwin.create() }
-    }
+    get() =
+        module {
+            single<HttpClientEngine> { Darwin.create() }
+        }
 
 actual val preferencesModule: Module
-    get() = module {
-        single { createDataStore() }
-    }
+    get() =
+        module {
+            single { createDataStore() }
+        }

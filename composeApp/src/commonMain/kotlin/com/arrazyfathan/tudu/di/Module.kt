@@ -24,27 +24,28 @@ import org.koin.dsl.module
 expect val platformModule: Module
 expect val preferencesModule: Module
 
-val dispatcherModule = module {
-    single<CoroutineDispatcher>(qualifier = named("io")) { Dispatchers.IO }
-}
-
-val sharedModule = module {
-    single {
-        HttpClientFactory.create(get())
+val dispatcherModule =
+    module {
+        single<CoroutineDispatcher>(qualifier = named("io")) { Dispatchers.IO }
     }
 
-    single<PreferencesManager> {
-        PreferencesManagerImpl(get(), get(named("io")))
+val sharedModule =
+    module {
+        single {
+            HttpClientFactory.create(get())
+        }
+
+        single<PreferencesManager> {
+            PreferencesManagerImpl(get(), get(named("io")))
+        }
+
+        single<AuthPreferences> {
+            AuthPreferencesImpl(get(), get(named("io")))
+        }
+
+        viewModelOf(::OnboardingViewModel)
+
+        viewModelOf(::LoginViewModel)
+        singleOf(::AuthenticationRepositoryImpl).bind<AuthenticationRepository>()
+        factoryOf(::LoginUseCase)
     }
-
-
-    single<AuthPreferences> {
-        AuthPreferencesImpl(get(), get(named("io")))
-    }
-
-    viewModelOf(::OnboardingViewModel)
-
-    viewModelOf(::LoginViewModel)
-    singleOf(::AuthenticationRepositoryImpl).bind<AuthenticationRepository>()
-    factoryOf(::LoginUseCase)
-}

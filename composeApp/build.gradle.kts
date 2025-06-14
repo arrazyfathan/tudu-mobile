@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.google.gms.googleService)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.ktlint)
 }
 
 val versionPropertiesInputStream = FileInputStream("$rootDir/version.properties")
@@ -192,5 +193,15 @@ compose.desktop {
                 configurationFiles.from("proguard-rules.pro")
             }
         }
+    }
+}
+
+ktlint {
+    verbose.set(true)
+    outputToConsole.set(true)
+
+    filter {
+        exclude("**/build/**")
+        exclude("**/generated/**")
     }
 }

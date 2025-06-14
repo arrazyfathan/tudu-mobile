@@ -12,13 +12,13 @@ import org.koin.compose.koinInject
 
 class PreferencesManagerImpl(
     private val dataStore: PrefsDataStore,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : PreferencesManager {
-
     override val isFirstTime: Flow<Boolean>
-        get() = dataStore.data.map { prefs ->
-            prefs[PreferencesKeys.isFirstTimeKeys] ?: true
-        }
+        get() =
+            dataStore.data.map { prefs ->
+                prefs[PreferencesKeys.isFirstTimeKeys] ?: true
+            }
 
     override suspend fun setIsFirstTime(value: Boolean) {
         withContext(ioDispatcher) {

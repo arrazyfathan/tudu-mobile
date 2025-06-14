@@ -7,10 +7,11 @@ import androidx.compose.runtime.Composable
 @Composable
 fun TuduTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = lightColorScheme(
-            primary = AppColors.Primary,
-        ),
+        colorScheme =
+            lightColorScheme(
+                primary = AppColors.Primary,
+            ),
         typography = Typography(),
-        content = content
+        content = content,
     )
 }

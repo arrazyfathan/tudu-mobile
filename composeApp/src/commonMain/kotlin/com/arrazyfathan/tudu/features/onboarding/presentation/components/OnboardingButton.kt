@@ -36,7 +36,7 @@ data class OnboardingButtonStyle(
     val offset: Dp = 4.dp,
     val horizontalPadding: Dp = 30.dp,
     val verticalPadding: Dp = 16.dp,
-    val customIcon: @Composable (() -> Unit)? = null
+    val customIcon: @Composable (() -> Unit)? = null,
 )
 
 @Composable
@@ -44,53 +44,68 @@ fun OnboardingButton(
     text: String,
     onClick: () -> Unit,
     style: OnboardingButtonStyle = OnboardingButtonStyle(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
     Box(
-
-        modifier = modifier.fillMaxWidth().safeClickable(
-            onClick = onClick, interactionSource = interactionSource, indication = null
-        ).drawWithCache {
-            onDrawBehind {
-                drawRoundRect(
-                    color = style.pressedColor, cornerRadius = CornerRadius(
-                        style.cornerRadius.toPx(), style.cornerRadius.toPx()
-                    ), size = Size(
-                        size.width, size.height
-                    )
-                )
-                if (!isPressed) {
+        modifier =
+            modifier.fillMaxWidth().safeClickable(
+                onClick = onClick,
+                interactionSource = interactionSource,
+                indication = null,
+            ).drawWithCache {
+                onDrawBehind {
                     drawRoundRect(
-                        color = style.normalColor, cornerRadius = CornerRadius(
-                            style.cornerRadius.toPx(), style.cornerRadius.toPx()
-                        ), size = Size(
-                            size.width, size.height - style.offset.toPx()
-                        )
+                        color = style.pressedColor,
+                        cornerRadius =
+                            CornerRadius(
+                                style.cornerRadius.toPx(),
+                                style.cornerRadius.toPx(),
+                            ),
+                        size =
+                            Size(
+                                size.width,
+                                size.height,
+                            ),
                     )
+                    if (!isPressed) {
+                        drawRoundRect(
+                            color = style.normalColor,
+                            cornerRadius =
+                                CornerRadius(
+                                    style.cornerRadius.toPx(),
+                                    style.cornerRadius.toPx(),
+                                ),
+                            size =
+                                Size(
+                                    size.width,
+                                    size.height - style.offset.toPx(),
+                                ),
+                        )
+                    }
                 }
-            }
-        },
-
-        ) {
+            },
+    ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(
-                top = style.verticalPadding,
-                bottom = style.verticalPadding,
-                start = style.horizontalPadding,
-                end = style.horizontalPadding
-            ).align(Alignment.Center).offset(
-                x = 0.dp, y = if (isPressed) 0.dp else (-style.offset / 2)
-            )
+            verticalAlignment = Alignment.CenterVertically,
+            modifier =
+                Modifier.padding(
+                    top = style.verticalPadding,
+                    bottom = style.verticalPadding,
+                    start = style.horizontalPadding,
+                    end = style.horizontalPadding,
+                ).align(Alignment.Center).offset(
+                    x = 0.dp,
+                    y = if (isPressed) 0.dp else (-style.offset / 2),
+                ),
         ) {
-
             Text(
                 text = text,
                 fontSize = style.fontSize,
                 style = MaterialTheme.typography.bodyMedium,
-                color = style.textColor
+                color = style.textColor,
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -106,6 +121,9 @@ fun OnboardingButton(
 @Composable
 fun ButtonPreview() {
     OnboardingButton(
-        text = "Hello", onClick = {}, style = OnboardingButtonStyle(), modifier = Modifier
+        text = "Hello",
+        onClick = {},
+        style = OnboardingButtonStyle(),
+        modifier = Modifier,
     )
 }

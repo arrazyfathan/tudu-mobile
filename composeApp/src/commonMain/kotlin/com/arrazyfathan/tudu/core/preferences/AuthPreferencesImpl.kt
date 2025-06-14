@@ -11,16 +11,16 @@ import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 
 class AuthPreferencesImpl(
-    private val dataStore: PrefsDataStore, private val ioDispatcher: CoroutineDispatcher
+    private val dataStore: PrefsDataStore,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : AuthPreferences {
-
     override val accessToken: Flow<String>
-        get() = dataStore.data.map { prefs ->
-            prefs[PreferencesKeys.accessToken] ?: ""
-        }
+        get() =
+            dataStore.data.map { prefs ->
+                prefs[PreferencesKeys.accessToken] ?: ""
+            }
     override val isAuthenticate: Flow<Boolean>
         get() = accessToken.map { it.isNotBlank() }
-
 
     override suspend fun saveAccessToken(token: String) {
         withContext(ioDispatcher) {

@@ -14,23 +14,24 @@ fun Modifier.safeClickable(
     debounceTime: Long = 500L,
     interactionSource: MutableInteractionSource,
     indication: Indication? = null,
-    onClick: () -> Unit
-): Modifier = composed {
-    var isClickable by remember { mutableStateOf(true) }
-    val scope = rememberCoroutineScope()
+    onClick: () -> Unit,
+): Modifier =
+    composed {
+        var isClickable by remember { mutableStateOf(true) }
+        val scope = rememberCoroutineScope()
 
-    this.clickable(
-        enabled = enabled,
-        indication = indication,
-        interactionSource = interactionSource
-    ) {
-        if (isClickable) {
-            isClickable = false
-            onClick()
-            scope.launch {
-                delay(debounceTime)
-                isClickable = true
+        this.clickable(
+            enabled = enabled,
+            indication = indication,
+            interactionSource = interactionSource,
+        ) {
+            if (isClickable) {
+                isClickable = false
+                onClick()
+                scope.launch {
+                    delay(debounceTime)
+                    isClickable = true
+                }
             }
         }
     }
-}
