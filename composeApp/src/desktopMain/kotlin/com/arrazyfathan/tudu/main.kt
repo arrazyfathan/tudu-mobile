@@ -7,16 +7,21 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.arrazyfathan.tudu.app.App
 import com.arrazyfathan.tudu.di.initKoin
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 
 fun main() {
+    Napier.base(DebugAntilog())
     initKoin()
     application {
-        val state = rememberWindowState(
-            size = DpSize(
-                width = 411.dp,
-                height = 823.dp
+        val state =
+            rememberWindowState(
+                size =
+                    DpSize(
+                        width = 411.dp,
+                        height = 823.dp,
+                    ),
             )
-        )
         Window(
             state = state,
             alwaysOnTop = true,

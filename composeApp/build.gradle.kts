@@ -15,9 +15,10 @@ plugins {
 }
 
 val versionPropertiesInputStream = FileInputStream("$rootDir/version.properties")
-val versionProperties = Properties().apply {
-    load(versionPropertiesInputStream)
-}
+val versionProperties =
+    Properties().apply {
+        load(versionPropertiesInputStream)
+    }
 
 val versionCodeProperty = versionProperties.getProperty("VERSION_CODE").toInt()
 val versionMajorProperty = versionProperties.getProperty("VERSION_MAJOR").toInt()
@@ -38,7 +39,9 @@ kotlin {
     }
 
     listOf(
-        iosX64(), iosArm64(), iosSimulatorArm64()
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -92,6 +95,8 @@ kotlin {
             implementation(libs.datastore.preferences)
 
             implementation(libs.feather)
+
+            implementation(libs.napier)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -111,12 +116,21 @@ kotlin {
 
 android {
     namespace = "com.arrazyfathan.tudu"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.arrazyfathan.tudu"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
         versionCode = versionCodeProperty
         versionName = versionNameProperty
     }
