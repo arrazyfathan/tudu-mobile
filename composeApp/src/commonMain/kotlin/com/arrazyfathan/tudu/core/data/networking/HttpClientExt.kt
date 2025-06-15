@@ -20,8 +20,8 @@ import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
 
-const val BASE_URL = "http://10.0.2.2:3000"
-const val BASE_URL2 = "http://localhost:3000"
+const val BASE_URL1 = "http://10.0.2.2:3000"
+const val BASE_URL = "http://localhost:3000"
 
 suspend inline fun <reified Response : Any> HttpClient.get(
     route: String,

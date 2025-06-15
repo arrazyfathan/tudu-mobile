@@ -20,10 +20,4 @@ sealed interface UiText {
             is DynamicString -> value
             is StringResourceId -> stringResource(resource = id, formatArgs = args)
         }
-
-    fun asPlainString(): String =
-        when (this) {
-            is DynamicString -> value
-            is StringResourceId -> ""
-        }
 }

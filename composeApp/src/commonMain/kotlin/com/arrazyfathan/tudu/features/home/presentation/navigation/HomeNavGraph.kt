@@ -1,7 +1,5 @@
 package com.arrazyfathan.tudu.features.home.presentation.navigation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -9,6 +7,8 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.arrazyfathan.tudu.app.navigation.Routes
+import com.arrazyfathan.tudu.features.auth.presentation.navigation.navigateToAuth
+import com.arrazyfathan.tudu.features.home.presentation.homepage.HomePageScreen
 
 fun NavController.navigateToHome(builder: NavOptionsBuilder.() -> Unit) = navigate(Routes.HomeGraph, builder)
 
@@ -17,8 +17,13 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
         startDestination = Routes.Home,
     ) {
         composable<Routes.Home> {
-            Column {
-                Text("Home")
+            HomePageScreen {
+                navController.navigateToAuth {
+                    popUpTo(Routes.HomeGraph) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
             }
         }
     }

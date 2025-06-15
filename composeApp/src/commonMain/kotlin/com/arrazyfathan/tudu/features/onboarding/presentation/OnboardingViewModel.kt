@@ -23,7 +23,7 @@ class OnboardingViewModel(
             _state.update { state -> state.copy(isChecking = true) }
             _state.update { state ->
                 state.copy(
-                    isAuthenticated = authPreferences.isAuthenticate.first(),
+                    isAuthenticated = authPreferences.isAuthenticated(),
                     isFirstTime = preferencesManager.isFirstTime.first(),
                 )
             }

@@ -1,10 +1,13 @@
 package com.arrazyfathan.tudu.core.preferences
 
-import kotlinx.coroutines.flow.Flow
+import com.arrazyfathan.tudu.core.domain.auth.AuthInfo
 
 interface AuthPreferences {
-    val accessToken: Flow<String>
-    val isAuthenticate: Flow<Boolean>
+    suspend fun isAuthenticated(): Boolean
 
-    suspend fun saveAccessToken(token: String)
+    suspend fun getAuthInfo(): AuthInfo?
+
+    suspend fun save(authInfo: AuthInfo)
+
+    suspend fun clear()
 }

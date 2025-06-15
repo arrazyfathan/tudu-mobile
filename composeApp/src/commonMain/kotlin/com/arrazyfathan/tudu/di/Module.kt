@@ -9,6 +9,7 @@ import com.arrazyfathan.tudu.features.auth.data.repository.AuthenticationReposit
 import com.arrazyfathan.tudu.features.auth.domain.repository.AuthenticationRepository
 import com.arrazyfathan.tudu.features.auth.domain.usecase.LoginUseCase
 import com.arrazyfathan.tudu.features.auth.presentation.login.LoginViewModel
+import com.arrazyfathan.tudu.features.home.presentation.homepage.HomePageViewModel
 import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -48,4 +49,6 @@ val sharedModule =
         viewModelOf(::LoginViewModel)
         singleOf(::AuthenticationRepositoryImpl).bind<AuthenticationRepository>()
         factoryOf(::LoginUseCase)
+
+        viewModelOf(::HomePageViewModel)
     }

@@ -1,16 +1,12 @@
 package com.arrazyfathan.tudu.features.onboarding.presentation.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.arrazyfathan.tudu.app.navigation.Routes
 import com.arrazyfathan.tudu.features.auth.presentation.navigation.navigateToAuth
 import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingScreen
-
-fun NavController.navigateToOnboarding(builder: NavOptionsBuilder.() -> Unit) = navigate(Routes.OnboardingGraph, builder)
 
 fun NavGraphBuilder.onboardingGraph(navController: NavHostController) {
     navigation<Routes.OnboardingGraph>(

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 sealed interface Result<out D, out E : Error> {
     data class Success<out D>(
-        val data: D,
+        val result: D,
     ) : Result<D, Nothing>
 
     data class Error<out E : com.arrazyfathan.tudu.core.domain.utils.Error>(
@@ -15,7 +15,7 @@ sealed interface Result<out D, out E : Error> {
 inline fun <T, E : Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> =
     when (this) {
         is Result.Error -> Result.Error(error)
-        is Result.Success -> Result.Success(map(data))
+        is Result.Success -> Result.Success(map(result))
     }
 
 fun <T, E : Error> Result<T, E>.asEmptyDataResult(): EmptyResult<E> = map { }
@@ -24,7 +24,7 @@ inline fun <T, E : Error> Result<T, E>.onSuccess(action: (T?) -> Unit): Result<T
     when (this) {
         is Result.Error -> this
         is Result.Success -> {
-            action(data)
+            action(result)
             this
         }
     }

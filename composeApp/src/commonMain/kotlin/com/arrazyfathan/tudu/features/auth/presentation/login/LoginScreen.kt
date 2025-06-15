@@ -10,8 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,8 +28,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arrazyfathan.tudu.core.presentation.ObserveAsEvents
 import com.arrazyfathan.tudu.core.ui.VerticalSpacer
 import com.arrazyfathan.tudu.core.ui.components.CustomToast
-import com.arrazyfathan.tudu.core.ui.components.DefaultButton
+import com.arrazyfathan.tudu.core.ui.components.DefaultButtonWithLoading
 import com.arrazyfathan.tudu.core.ui.components.DefaultTextField
+import com.arrazyfathan.tudu.core.ui.components.PasswordTextField
+import com.arrazyfathan.tudu.utils.removeAllSpaces
+import com.arrazyfathan.tudu.utils.toGenericError
 
 @Composable
 fun LoginScreen(
@@ -40,25 +41,22 @@ fun LoginScreen(
     viewModel: LoginViewModel,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var showToast by remember { mutableStateOf(false) }
-    var toastMessage by remember { mutableStateOf("") }
 
     ObserveAsEvents(viewModel.events) { events ->
         when (events) {
             is LoginEvent.Error -> {
-                showToast = true
-                toastMessage = events.error.asPlainString()
+                viewModel.showToast()
             }
 
             LoginEvent.LoginSuccess -> onLoginSuccess()
         }
     }
 
-    if (showToast) {
+    if (state.showToast) {
         CustomToast(
-            message = toastMessage,
+            message = state.errorMessage?.asString().toGenericError(),
             durationMillis = 3000,
-            onDismiss = { showToast = false },
+            onDismiss = { viewModel.dismissToast() },
         )
     }
 
@@ -124,10 +122,10 @@ fun LoginContent(
         )
         VerticalSpacer(8.dp)
 
-        DefaultTextField(
+        PasswordTextField(
             text = state.password,
             onValueChange = {
-                onAction(LoginAction.OnPasswordChange(it))
+                onAction(LoginAction.OnPasswordChange(it.removeAllSpaces()))
             },
             placeholder = "Password",
         )
@@ -144,11 +142,12 @@ fun LoginContent(
 
         VerticalSpacer(16.dp)
 
-        DefaultButton(
+        DefaultButtonWithLoading(
             onClick = {
                 onAction(LoginAction.OnLogin)
             },
             text = "Login",
+            isLoading = state.isLoading,
         )
 
         VerticalSpacer(8.dp)

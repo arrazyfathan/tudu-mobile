@@ -36,6 +36,14 @@ class LoginViewModel(
         }
     }
 
+    fun dismissToast() {
+        _state.update { it.copy(showToast = false) }
+    }
+
+    fun showToast() {
+        _state.update { it.copy(showToast = true) }
+    }
+
     private fun login() {
         _state.update { it.copy(isLoading = true) }
         viewModelScope.launch {
@@ -44,13 +52,7 @@ class LoginViewModel(
                     username = _state.value.username,
                     password = _state.value.password,
                 ),
-            ).onSuccess { user ->
-                _state.update {
-                    it.copy(
-                        user = user,
-                        isLoading = false,
-                    )
-                }
+            ).onSuccess {
                 eventChannel.send(LoginEvent.LoginSuccess)
             }.onError { error ->
                 val message = error.toErrorMessage()
