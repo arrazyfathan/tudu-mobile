@@ -4,7 +4,7 @@ import PreferencesKeys
 import PrefsDataStore
 import androidx.compose.runtime.Composable
 import androidx.datastore.preferences.core.edit
-import com.arrazyfathan.tudu.core.domain.auth.AuthInfo
+import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first

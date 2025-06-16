@@ -1,7 +1,7 @@
 package com.arrazyfathan.tudu.features.auth.data.repository
 
 import com.arrazyfathan.tudu.core.data.networking.post
-import com.arrazyfathan.tudu.core.domain.auth.AuthInfo
+import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 import com.arrazyfathan.tudu.core.domain.utils.ApiResponse
 import com.arrazyfathan.tudu.core.domain.utils.DataError
 import com.arrazyfathan.tudu.core.domain.utils.Result

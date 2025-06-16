@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -107,9 +106,12 @@ fun LoginContent(
         DefaultTextField(
             text = state.username,
             onValueChange = {
-                onAction(LoginAction.OnUsernameChange(it))
+                onAction(LoginAction.OnUsernameChange(it.removeAllSpaces()))
             },
             placeholder = "Username",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.usernameError != null,
+            errorMessage = state.usernameError,
         )
 
         VerticalSpacer(8.dp)
@@ -128,6 +130,9 @@ fun LoginContent(
                 onAction(LoginAction.OnPasswordChange(it.removeAllSpaces()))
             },
             placeholder = "Password",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.passwordError != null,
+            errorMessage = state.passwordError,
         )
 
         VerticalSpacer(16.dp)

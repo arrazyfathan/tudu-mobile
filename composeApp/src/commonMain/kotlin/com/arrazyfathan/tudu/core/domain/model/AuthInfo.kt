@@ -1,4 +1,4 @@
-package com.arrazyfathan.tudu.core.domain.auth
+package com.arrazyfathan.tudu.core.domain.model
 
 data class AuthInfo(
     val accessToken: String? = null,

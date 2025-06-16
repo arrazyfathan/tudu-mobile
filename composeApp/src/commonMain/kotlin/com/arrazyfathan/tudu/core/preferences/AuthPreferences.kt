@@ -1,6 +1,6 @@
 package com.arrazyfathan.tudu.core.preferences
 
-import com.arrazyfathan.tudu.core.domain.auth.AuthInfo
+import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 
 interface AuthPreferences {
     suspend fun isAuthenticated(): Boolean
