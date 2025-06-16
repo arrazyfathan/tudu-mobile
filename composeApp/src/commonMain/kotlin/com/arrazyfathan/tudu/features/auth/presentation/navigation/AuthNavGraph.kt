@@ -10,6 +10,7 @@ import com.arrazyfathan.tudu.app.navigation.Routes
 import com.arrazyfathan.tudu.features.auth.presentation.login.LoginScreen
 import com.arrazyfathan.tudu.features.auth.presentation.login.LoginViewModel
 import com.arrazyfathan.tudu.features.auth.presentation.register.RegisterScreen
+import com.arrazyfathan.tudu.features.auth.presentation.register.RegisterViewModel
 import com.arrazyfathan.tudu.features.home.presentation.navigation.navigateToHome
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -40,6 +41,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         }
 
         composable<Routes.Register> {
+            val viewModel = koinViewModel<RegisterViewModel>()
             RegisterScreen(
                 onRegisterSuccess = {
                     navController.navigate(Routes.Login) {
@@ -52,6 +54,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 onBack = {
                     navController.navigateUp()
                 },
+                viewModel = viewModel,
             )
         }
     }

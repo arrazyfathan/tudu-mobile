@@ -18,7 +18,7 @@ fun TuduAppBar(
     icon: @Composable (() -> Unit)? = null,
 ) {
     TopAppBar(
-        modifier = Modifier.fillMaxWidth().offset(x = ((-16).dp)),
+        modifier = Modifier.fillMaxWidth().offset(x = ((-16).dp), y = ((-24).dp)),
         title = {
             title?.let { Text(text = it) }
         },

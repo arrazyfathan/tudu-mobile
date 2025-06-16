@@ -1,6 +1,7 @@
 package com.arrazyfathan.tudu.features.auth.domain.repository
 
 import com.arrazyfathan.tudu.core.domain.utils.DataError
+import com.arrazyfathan.tudu.core.domain.utils.EmptyResult
 import com.arrazyfathan.tudu.core.domain.utils.Result
 import com.arrazyfathan.tudu.features.auth.domain.model.User
 
@@ -15,7 +16,7 @@ interface AuthenticationRepository {
         password: String,
         email: String,
         name: String,
-    ): Result<String, DataError>
+    ): EmptyResult<DataError>
 
     suspend fun logout(): Result<String, DataError>
 

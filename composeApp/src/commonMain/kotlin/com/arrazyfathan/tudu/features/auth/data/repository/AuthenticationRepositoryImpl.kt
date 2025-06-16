@@ -4,6 +4,7 @@ import com.arrazyfathan.tudu.core.data.networking.post
 import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 import com.arrazyfathan.tudu.core.domain.utils.ApiResponse
 import com.arrazyfathan.tudu.core.domain.utils.DataError
+import com.arrazyfathan.tudu.core.domain.utils.EmptyResult
 import com.arrazyfathan.tudu.core.domain.utils.Result
 import com.arrazyfathan.tudu.core.domain.utils.map
 import com.arrazyfathan.tudu.core.preferences.AuthPreferences
@@ -54,7 +55,7 @@ class AuthenticationRepositoryImpl(
         password: String,
         email: String,
         name: String,
-    ): Result<String, DataError> {
+    ): EmptyResult<DataError> {
         TODO("Not yet implemented")
     }
 

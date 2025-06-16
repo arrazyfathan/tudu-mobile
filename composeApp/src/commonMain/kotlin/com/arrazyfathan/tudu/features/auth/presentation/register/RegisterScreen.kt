@@ -3,16 +3,26 @@ package com.arrazyfathan.tudu.features.auth.presentation.register
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arrazyfathan.tudu.core.ui.VerticalSpacer
+import com.arrazyfathan.tudu.core.ui.components.DefaultButtonWithLoading
+import com.arrazyfathan.tudu.core.ui.components.DefaultTextField
+import com.arrazyfathan.tudu.core.ui.components.PasswordTextField
 import com.arrazyfathan.tudu.core.ui.components.TuduAppBar
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
@@ -21,14 +31,22 @@ import compose.icons.feathericons.ArrowLeft
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     onBack: () -> Unit,
+    viewModel: RegisterViewModel,
 ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
     RegisterContent(
         onBack = onBack,
+        state = state,
+        onAction = viewModel::onAction,
     )
 }
 
 @Composable
-fun RegisterContent(onBack: () -> Unit) {
+fun RegisterContent(
+    onBack: () -> Unit,
+    state: RegisterState,
+    onAction: (RegisterAction) -> Unit,
+) {
     Column(
         modifier = Modifier.padding(16.dp).fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -52,6 +70,123 @@ fun RegisterContent(onBack: () -> Unit) {
                 }
             },
         )
-        Text(text = "Register")
+        Text(
+            text = "Register",
+            fontSize = 34.sp,
+            lineHeight = 38.sp,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Medium,
+            color = Color.Black,
+        )
+        VerticalSpacer(40.dp)
+        Text(
+            text = "Username",
+            fontSize = 14.sp,
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.Black,
+        )
+        VerticalSpacer(8.dp)
+        DefaultTextField(
+            text = state.username,
+            onValueChange = {
+                onAction(RegisterAction.OnUsernameChange(it))
+            },
+            placeholder = "Username",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.usernameError != null,
+            errorMessage = state.usernameError,
+        )
+
+        VerticalSpacer(8.dp)
+
+        Text(
+            text = "Name",
+            fontSize = 14.sp,
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.Black,
+        )
+        VerticalSpacer(8.dp)
+        DefaultTextField(
+            text = state.name,
+            onValueChange = {
+                onAction(RegisterAction.OnNameChange(it))
+            },
+            placeholder = "Name",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.nameError != null,
+            errorMessage = state.nameError,
+        )
+
+        VerticalSpacer(8.dp)
+
+        VerticalSpacer(8.dp)
+
+        Text(
+            text = "Email",
+            fontSize = 14.sp,
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.Black,
+        )
+        VerticalSpacer(8.dp)
+        DefaultTextField(
+            text = state.email,
+            onValueChange = {
+                onAction(RegisterAction.OnEmailChange(it))
+            },
+            placeholder = "Email",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.emailError != null,
+            errorMessage = state.emailError,
+        )
+
+        VerticalSpacer(8.dp)
+
+        Text(
+            text = "Password",
+            fontSize = 14.sp,
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.Black,
+        )
+        VerticalSpacer(8.dp)
+
+        PasswordTextField(
+            text = state.password,
+            onValueChange = {
+                onAction(RegisterAction.OnPasswordChange(it))
+            },
+            placeholder = "Password",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.passwordError != null,
+            errorMessage = state.passwordError,
+        )
+
+        VerticalSpacer(8.dp)
+
+        Text(
+            text = "Password Confirmation",
+            fontSize = 14.sp,
+            style = MaterialTheme.typography.titleSmall,
+            color = Color.Black,
+        )
+        VerticalSpacer(8.dp)
+
+        PasswordTextField(
+            text = state.passwordConfirmation,
+            onValueChange = {
+                onAction(RegisterAction.OnPasswordConfirmationChange(it))
+            },
+            placeholder = "Password Confirmation",
+            modifier = Modifier.fillMaxWidth(),
+            isError = state.passwordConfirmationError != null,
+            errorMessage = state.passwordConfirmationError,
+        )
+
+        VerticalSpacer(24.dp)
+
+        DefaultButtonWithLoading(
+            onClick = {},
+            text = "Register",
+            isLoading = false,
+        )
     }
 }

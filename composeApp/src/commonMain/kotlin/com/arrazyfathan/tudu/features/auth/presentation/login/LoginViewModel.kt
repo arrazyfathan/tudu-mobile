@@ -55,13 +55,13 @@ class LoginViewModel(
         _state.update { it.copy(showToast = true) }
     }
 
-    fun validateUsername(): Boolean {
+    private fun validateUsername(): Boolean {
         val emailResult = validateUsernameUseCase.execute(_state.value.username)
         _state.update { it.copy(usernameError = emailResult.errorMessage) }
         return emailResult.successful
     }
 
-    fun validatePassword(): Boolean {
+    private fun validatePassword(): Boolean {
         val passwordResult = validatePasswordUseCase.execute(_state.value.password)
         _state.update { it.copy(passwordError = passwordResult.errorMessage) }
         return passwordResult.successful
