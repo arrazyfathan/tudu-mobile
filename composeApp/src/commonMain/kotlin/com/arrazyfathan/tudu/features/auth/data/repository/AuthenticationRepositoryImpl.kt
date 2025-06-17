@@ -6,15 +6,16 @@ import com.arrazyfathan.tudu.core.domain.utils.ApiResponse
 import com.arrazyfathan.tudu.core.domain.utils.DataError
 import com.arrazyfathan.tudu.core.domain.utils.EmptyResult
 import com.arrazyfathan.tudu.core.domain.utils.Result
+import com.arrazyfathan.tudu.core.domain.utils.asEmptyDataResult
 import com.arrazyfathan.tudu.core.domain.utils.map
 import com.arrazyfathan.tudu.core.preferences.AuthPreferences
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginRequestDto
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginResponseDto
+import com.arrazyfathan.tudu.features.auth.data.dto.RegisterRequestDto
 import com.arrazyfathan.tudu.features.auth.data.mapper.toUser
 import com.arrazyfathan.tudu.features.auth.domain.model.User
 import com.arrazyfathan.tudu.features.auth.domain.repository.AuthenticationRepository
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.delay
 
 class AuthenticationRepositoryImpl(
     private val httpClient: HttpClient,
@@ -33,8 +34,6 @@ class AuthenticationRepositoryImpl(
                         password = password,
                     ),
             )
-
-        delay(5000)
 
         if (response is Result.Success) {
             val loginData = response.result.data
@@ -56,7 +55,19 @@ class AuthenticationRepositoryImpl(
         email: String,
         name: String,
     ): EmptyResult<DataError> {
-        TODO("Not yet implemented")
+        val response =
+            httpClient.post<RegisterRequestDto, Unit>(
+                route = "/api/auth/register",
+                body =
+                    RegisterRequestDto(
+                        username = username,
+                        password = password,
+                        email = email,
+                        name = name,
+                    ),
+            )
+
+        return response.asEmptyDataResult()
     }
 
     override suspend fun logout(): Result<String, DataError> {
