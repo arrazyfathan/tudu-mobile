@@ -11,6 +11,7 @@ import com.arrazyfathan.tudu.features.auth.domain.usecase.LoginUseCase
 import com.arrazyfathan.tudu.features.auth.domain.usecase.RegisterUseCase
 import com.arrazyfathan.tudu.features.auth.presentation.login.LoginViewModel
 import com.arrazyfathan.tudu.features.auth.presentation.register.RegisterViewModel
+import com.arrazyfathan.tudu.features.home.domain.usecase.LogoutUseCase
 import com.arrazyfathan.tudu.features.home.presentation.homepage.HomePageViewModel
 import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -57,4 +58,5 @@ val sharedModule =
         factoryOf(::RegisterUseCase)
 
         viewModelOf(::HomePageViewModel)
+        factoryOf(::LogoutUseCase)
     }

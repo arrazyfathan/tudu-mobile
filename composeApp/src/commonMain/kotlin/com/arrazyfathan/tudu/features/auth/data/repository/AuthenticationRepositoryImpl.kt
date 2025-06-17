@@ -11,6 +11,7 @@ import com.arrazyfathan.tudu.core.domain.utils.map
 import com.arrazyfathan.tudu.core.preferences.AuthPreferences
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginRequestDto
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginResponseDto
+import com.arrazyfathan.tudu.features.auth.data.dto.LogoutRequestDto
 import com.arrazyfathan.tudu.features.auth.data.dto.RegisterRequestDto
 import com.arrazyfathan.tudu.features.auth.data.mapper.toUser
 import com.arrazyfathan.tudu.features.auth.domain.model.User
@@ -70,8 +71,17 @@ class AuthenticationRepositoryImpl(
         return response.asEmptyDataResult()
     }
 
-    override suspend fun logout(): Result<String, DataError> {
-        TODO("Not yet implemented")
+    override suspend fun logout(refreshToken: String): EmptyResult<DataError> {
+        val response =
+            httpClient.post<LogoutRequestDto, Unit>(
+                route = "/api/auth/logout",
+                body =
+                    LogoutRequestDto(
+                        refreshToken = refreshToken,
+                    ),
+            )
+
+        return response.asEmptyDataResult()
     }
 
     override suspend fun refreshToken(): Result<String, DataError> {

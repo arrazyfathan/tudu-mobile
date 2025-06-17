@@ -18,7 +18,7 @@ interface AuthenticationRepository {
         name: String,
     ): EmptyResult<DataError>
 
-    suspend fun logout(): Result<String, DataError>
+    suspend fun logout(refreshToken: String): EmptyResult<DataError>
 
     suspend fun refreshToken(): Result<String, DataError>
 }
