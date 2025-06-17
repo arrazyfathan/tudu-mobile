@@ -17,14 +17,14 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController) {
         startDestination = Routes.Home,
     ) {
         composable<Routes.Home> {
-            HomePageScreen {
+            HomePageScreen(onLogout = {
                 navController.navigateToAuth {
                     popUpTo(Routes.HomeGraph) {
                         inclusive = true
                     }
                     launchSingleTop = true
                 }
-            }
+            })
         }
     }
 }

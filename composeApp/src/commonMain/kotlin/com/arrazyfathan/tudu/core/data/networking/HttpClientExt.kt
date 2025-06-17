@@ -3,12 +3,14 @@ package com.arrazyfathan.tudu.core.data.networking
 import com.arrazyfathan.tudu.core.domain.utils.DataError
 import com.arrazyfathan.tudu.core.domain.utils.ErrorResponse
 import com.arrazyfathan.tudu.core.domain.utils.Result
+import com.arrazyfathan.tudu.core.preferences.AuthPreferences
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
@@ -25,6 +27,7 @@ expect val BASE_URL: String
 suspend inline fun <reified Response : Any> HttpClient.get(
     route: String,
     queryParameters: Map<String, Any?> = mapOf(),
+    headers: Map<String, String> = mapOf(),
 ): Result<Response, DataError> =
     safeCall {
         get {
@@ -32,23 +35,31 @@ suspend inline fun <reified Response : Any> HttpClient.get(
             queryParameters.forEach { (key, value) ->
                 parameter(key, value)
             }
+            headers.forEach { (key, value) ->
+                header(key, value)
+            }
         }
     }
 
 suspend inline fun <reified Request, reified Response : Any> HttpClient.post(
     route: String,
     body: Request,
+    headers: Map<String, String> = mapOf(),
 ): Result<Response, DataError> =
     safeCall {
         post {
             url(constructRoute(route))
             setBody(body)
+            headers.forEach { (key, value) ->
+                header(key, value)
+            }
         }
     }
 
 suspend inline fun <reified Response : Any> HttpClient.delete(
     route: String,
     queryParameters: Map<String, Any?> = mapOf(),
+    headers: Map<String, String> = mapOf(),
 ): Result<Response, DataError> =
     safeCall {
         delete {
@@ -56,28 +67,39 @@ suspend inline fun <reified Response : Any> HttpClient.delete(
             queryParameters.forEach { (key, value) ->
                 parameter(key, value)
             }
+            headers.forEach { (key, value) ->
+                header(key, value)
+            }
         }
     }
 
 suspend inline fun <reified Request, reified Response : Any> HttpClient.put(
     route: String,
     body: Request,
+    headers: Map<String, String> = mapOf(),
 ): Result<Response, DataError> =
     safeCall {
         put {
             url(constructRoute(route))
             setBody(body)
+            headers.forEach { (key, value) ->
+                header(key, value)
+            }
         }
     }
 
 suspend inline fun <reified Request, reified Response : Any> HttpClient.patch(
     route: String,
     body: Request,
+    headers: Map<String, String> = mapOf(),
 ): Result<Response, DataError> =
     safeCall {
         patch {
             url(constructRoute(route))
             setBody(body)
+            headers.forEach { (key, value) ->
+                header(key, value)
+            }
         }
     }
 
@@ -144,3 +166,11 @@ fun constructRoute(route: String): String =
         route.startsWith("/") -> BASE_URL + route
         else -> "$BASE_URL/$route"
     }
+
+suspend fun AuthPreferences.token(): String {
+    return this.getAuthInfo()?.accessToken ?: ""
+}
+
+fun authorizationHeader(value: String): Pair<String, String> {
+    return "Authorization" to "Bearer $value"
+}

@@ -5,7 +5,6 @@ import PrefsDataStore
 import androidx.compose.runtime.Composable
 import androidx.datastore.preferences.core.edit
 import com.arrazyfathan.tudu.core.domain.model.AuthInfo
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -44,7 +43,6 @@ class AuthPreferencesImpl(
             prefs.remove(PreferencesKeys.refreshToken)
             prefs.remove(PreferencesKeys.userId)
         }
-        Napier.d("AuthPreferencesImpl::clear")
     }
 }
 

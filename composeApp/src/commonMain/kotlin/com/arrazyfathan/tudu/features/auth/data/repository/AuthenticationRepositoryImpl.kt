@@ -1,6 +1,10 @@
 package com.arrazyfathan.tudu.features.auth.data.repository
 
+import com.arrazyfathan.tudu.core.data.networking.RefreshTokenRequest
+import com.arrazyfathan.tudu.core.data.networking.RefreshTokenResponse
+import com.arrazyfathan.tudu.core.data.networking.authorizationHeader
 import com.arrazyfathan.tudu.core.data.networking.post
+import com.arrazyfathan.tudu.core.data.networking.token
 import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 import com.arrazyfathan.tudu.core.domain.utils.ApiResponse
 import com.arrazyfathan.tudu.core.domain.utils.DataError
@@ -13,7 +17,9 @@ import com.arrazyfathan.tudu.features.auth.data.dto.LoginRequestDto
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginResponseDto
 import com.arrazyfathan.tudu.features.auth.data.dto.LogoutRequestDto
 import com.arrazyfathan.tudu.features.auth.data.dto.RegisterRequestDto
+import com.arrazyfathan.tudu.features.auth.data.mapper.toRefreshToken
 import com.arrazyfathan.tudu.features.auth.data.mapper.toUser
+import com.arrazyfathan.tudu.features.auth.domain.model.RefreshToken
 import com.arrazyfathan.tudu.features.auth.domain.model.User
 import com.arrazyfathan.tudu.features.auth.domain.repository.AuthenticationRepository
 import io.ktor.client.HttpClient
@@ -79,12 +85,24 @@ class AuthenticationRepositoryImpl(
                     LogoutRequestDto(
                         refreshToken = refreshToken,
                     ),
+                headers =
+                    mapOf(
+                        authorizationHeader(authPreferences.token()),
+                    ),
             )
 
         return response.asEmptyDataResult()
     }
 
-    override suspend fun refreshToken(): Result<String, DataError> {
-        TODO("Not yet implemented")
+    override suspend fun refreshToken(refreshToken: String): Result<RefreshToken?, DataError> {
+        val response =
+            httpClient.post<RefreshTokenRequest, ApiResponse<RefreshTokenResponse>>(
+                route = "/api/auth/refresh_token",
+                body =
+                    RefreshTokenRequest(
+                        refreshToken = refreshToken,
+                    ),
+            )
+        return response.map { it.data?.toRefreshToken() }
     }
 }

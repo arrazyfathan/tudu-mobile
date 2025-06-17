@@ -216,7 +216,7 @@ buildkonfig {
 
     targetConfigs("development") {
         create("android") {
-            buildConfigField(FieldSpec.Type.STRING, "BASE_URL_ANDROID", "http://dev:3000")
+            buildConfigField(FieldSpec.Type.STRING, "BASE_URL_ANDROID", "http://10.0.2.2:3000")
         }
     }
 
