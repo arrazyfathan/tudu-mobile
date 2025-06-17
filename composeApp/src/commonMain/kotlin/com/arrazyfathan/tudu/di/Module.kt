@@ -35,7 +35,7 @@ val dispatcherModule =
 val sharedModule =
     module {
         single {
-            HttpClientFactory.create(get())
+            HttpClientFactory(get()).build(get())
         }
 
         single<PreferencesManager> {

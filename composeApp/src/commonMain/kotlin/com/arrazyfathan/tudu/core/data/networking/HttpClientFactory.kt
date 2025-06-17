@@ -1,9 +1,16 @@
 package com.arrazyfathan.tudu.core.data.networking
 
+import com.arrazyfathan.tudu.core.domain.model.AuthInfo
+import com.arrazyfathan.tudu.core.domain.utils.ApiResponse
+import com.arrazyfathan.tudu.core.domain.utils.Result
+import com.arrazyfathan.tudu.core.preferences.AuthPreferences
 import com.arrazyfathan.tudu.utils.PrettyLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -13,8 +20,10 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-object HttpClientFactory {
-    fun create(engine: HttpClientEngine): HttpClient =
+class HttpClientFactory(
+    private val authPreferences: AuthPreferences,
+) {
+    fun build(engine: HttpClientEngine): HttpClient =
         HttpClient(engine) {
             install(ContentNegotiation) {
                 json(
@@ -33,6 +42,51 @@ object HttpClientFactory {
             install(Logging) {
                 logger = PrettyLogger
                 level = LogLevel.ALL
+            }
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        val authInfo = authPreferences.getAuthInfo()
+                        BearerTokens(
+                            accessToken = authInfo?.accessToken.orEmpty(),
+                            refreshToken = authInfo?.refreshToken.orEmpty(),
+                        )
+                    }
+                    refreshTokens {
+                        val autInfo = authPreferences.getAuthInfo()
+
+                        val response =
+                            client.post<RefreshTokenRequest, ApiResponse<RefreshTokenResponse>>(
+                                route = "/api/auth/refresh_token",
+                                body =
+                                    RefreshTokenRequest(
+                                        refreshToken = autInfo?.refreshToken.orEmpty(),
+                                    ),
+                            )
+
+                        if (response is Result.Success) {
+                            val data = response.result.data
+                            val newAuthInfo =
+                                AuthInfo(
+                                    accessToken = data?.token?.accessToken,
+                                    refreshToken = data?.token?.refreshToken,
+                                    userId = data?.id,
+                                )
+
+                            authPreferences.save(newAuthInfo)
+
+                            BearerTokens(
+                                accessToken = newAuthInfo.accessToken.orEmpty(),
+                                refreshToken = newAuthInfo.refreshToken,
+                            )
+                        } else {
+                            BearerTokens(
+                                accessToken = "",
+                                refreshToken = "",
+                            )
+                        }
+                    }
+                }
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
