@@ -1,3 +1,4 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
@@ -13,13 +14,13 @@ plugins {
     alias(libs.plugins.google.gms.googleService)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.buildKonfig)
 }
 
 val versionPropertiesInputStream = FileInputStream("$rootDir/version.properties")
-val versionProperties =
-    Properties().apply {
-        load(versionPropertiesInputStream)
-    }
+val versionProperties = Properties().apply {
+    load(versionPropertiesInputStream)
+}
 
 val versionCodeProperty = versionProperties.getProperty("VERSION_CODE").toInt()
 val versionMajorProperty = versionProperties.getProperty("VERSION_MAJOR").toInt()
@@ -119,21 +120,12 @@ kotlin {
 
 android {
     namespace = "com.arrazyfathan.tudu"
-    compileSdk =
-        libs.versions.android.compileSdk
-            .get()
-            .toInt()
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.arrazyfathan.tudu"
-        minSdk =
-            libs.versions.android.minSdk
-                .get()
-                .toInt()
-        targetSdk =
-            libs.versions.android.targetSdk
-                .get()
-                .toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = versionCodeProperty
         versionName = versionNameProperty
     }
@@ -194,6 +186,43 @@ compose.desktop {
                 obfuscate.set(true)
                 configurationFiles.from("proguard-rules.pro")
             }
+        }
+    }
+}
+
+buildkonfig {
+    packageName = "com.arrazyfathan.tudu"
+
+    defaultConfigs {
+        buildConfigField(FieldSpec.Type.STRING, "APP_NAME", "Tudu")
+        buildConfigField(FieldSpec.Type.STRING, "DEFAULT_BASE_URL", "http://localhost:3000")
+    }
+
+    defaultConfigs("development") {
+        buildConfigField(FieldSpec.Type.STRING, "APP_NAME", "Tudu")
+        buildConfigField(FieldSpec.Type.STRING, "DEFAULT_BASE_URL", "http://localhost:3000")
+    }
+
+    defaultConfigs("production") {
+        buildConfigField(FieldSpec.Type.STRING, "APP_NAME", "Tudu")
+        buildConfigField(FieldSpec.Type.STRING, "DEFAULT_BASE_URL", "http://localhost:3000")
+    }
+
+    targetConfigs {
+        create("android") {
+            buildConfigField(FieldSpec.Type.STRING, "BASE_URL_ANDROID", "http://10.0.2.2:3000")
+        }
+    }
+
+    targetConfigs("development") {
+        create("android") {
+            buildConfigField(FieldSpec.Type.STRING, "BASE_URL_ANDROID", "http://dev:3000")
+        }
+    }
+
+    targetConfigs("production") {
+        create("android") {
+            buildConfigField(FieldSpec.Type.STRING, "BASE_URL_ANDROID", "http://10.0.2.2:3000")
         }
     }
 }

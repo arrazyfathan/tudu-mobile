@@ -53,14 +53,14 @@ class HttpClientFactory(
                         )
                     }
                     refreshTokens {
-                        val autInfo = authPreferences.getAuthInfo()
+                        val authInfo = authPreferences.getAuthInfo()
 
                         val response =
                             client.post<RefreshTokenRequest, ApiResponse<RefreshTokenResponse>>(
                                 route = "/api/auth/refresh_token",
                                 body =
                                     RefreshTokenRequest(
-                                        refreshToken = autInfo?.refreshToken.orEmpty(),
+                                        refreshToken = authInfo?.refreshToken.orEmpty(),
                                     ),
                             )
 

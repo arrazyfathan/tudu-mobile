@@ -20,8 +20,7 @@ import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
 
-const val BASE_URL = "http://10.0.2.2:3000"
-const val BASE_URL1 = "http://localhost:3000"
+expect val BASE_URL: String
 
 suspend inline fun <reified Response : Any> HttpClient.get(
     route: String,
@@ -132,6 +131,7 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
                 Result.Error(DataError.SerializationError)
             }
         }
+
         401 -> Result.Error(DataError.Unauthorized)
         in 500..599 -> Result.Error(DataError.ServerError)
         else -> Result.Error(DataError.UnknownError)
