@@ -1,6 +1,6 @@
-package com.arrazyfathan.tudu.features.onboarding.presentation
+package com.arrazyfathan.tudu.app
 
-data class OnboardingState(
+data class AppState(
     val isChecking: Boolean = false,
     val isAuthenticated: Boolean = false,
     val isOnboarded: Boolean = true,

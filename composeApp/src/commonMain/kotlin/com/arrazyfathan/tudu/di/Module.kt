@@ -1,5 +1,6 @@
 package com.arrazyfathan.tudu.di
 
+import com.arrazyfathan.tudu.app.AppViewModel
 import com.arrazyfathan.tudu.core.data.networking.HttpClientFactory
 import com.arrazyfathan.tudu.core.preferences.PreferencesManager
 import com.arrazyfathan.tudu.core.preferences.PreferencesManagerImpl
@@ -47,6 +48,7 @@ val sharedModule =
             SessionStorageImpl(get(), get(named("io")))
         }
 
+        viewModelOf(::AppViewModel)
         viewModelOf(::OnboardingViewModel)
 
         singleOf(::AuthenticationRepositoryImpl).bind<AuthenticationRepository>()

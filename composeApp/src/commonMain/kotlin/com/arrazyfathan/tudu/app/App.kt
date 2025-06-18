@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,7 +16,6 @@ import com.arrazyfathan.tudu.app.navigation.NavigationRoot
 import com.arrazyfathan.tudu.app.navigation.Routes
 import com.arrazyfathan.tudu.core.ui.AppColors
 import com.arrazyfathan.tudu.core.ui.TuduTheme
-import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -23,20 +23,20 @@ import org.koin.compose.viewmodel.koinViewModel
 @Preview
 fun App() {
     TuduTheme {
-        val viewModel = koinViewModel<OnboardingViewModel>()
+        val viewModel = koinViewModel<AppViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
+        val navController = rememberNavController()
 
         val destination =
-            if (!state.isOnboarded) {
-                Routes.OnboardingGraph
-            } else if (state.isOnboarded && !state.isAuthenticated) {
-                Routes.AuthGraph
-            } else {
-                Routes.HomeGraph
+            remember(state) {
+                when {
+                    !state.isOnboarded -> Routes.OnboardingGraph
+                    !state.isAuthenticated -> Routes.AuthGraph
+                    else -> Routes.HomeGraph
+                }
             }
 
         if (!state.isChecking) {
-            val navController = rememberNavController()
             Surface(
                 modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
                 color = AppColors.White,
