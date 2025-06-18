@@ -5,22 +5,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.arrazyfathan.tudu.app.navigation.Routes
-import com.arrazyfathan.tudu.features.auth.presentation.navigation.navigateToAuth
 import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingScreen
+import com.arrazyfathan.tudu.features.onboarding.presentation.OnboardingViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.onboardingGraph(navController: NavHostController) {
     navigation<Routes.OnboardingGraph>(
         startDestination = Routes.Onboarding,
     ) {
         composable<Routes.Onboarding> {
-            OnboardingScreen(onNext = {
-                navController.navigateToAuth {
-                    popUpTo(Routes.OnboardingGraph) {
-                        inclusive = true
-                    }
-                    launchSingleTop = true
-                }
-            })
+            val viewModel = koinViewModel<OnboardingViewModel>()
+            OnboardingScreen(viewModel)
         }
     }
 }

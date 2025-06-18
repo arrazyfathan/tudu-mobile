@@ -27,24 +27,19 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowRight
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
 import tudu.composeapp.generated.resources.Res
 import tudu.composeapp.generated.resources.bg_onboarding
 
 @Composable
-fun OnboardingScreen(onNext: () -> Unit) {
-    val viewModel = koinViewModel<OnboardingViewModel>()
-
+fun OnboardingScreen(viewModel: OnboardingViewModel) {
     OnboardingContent(
         onEvent = viewModel::onEvent,
-        onNext = onNext,
     )
 }
 
 @Composable
 fun OnboardingContent(
     onEvent: (OnboardingEvent) -> Unit,
-    onNext: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -78,7 +73,6 @@ fun OnboardingContent(
             text = "Let's Go",
             onClick = {
                 onEvent(OnboardingEvent.OnSkipOnboarding)
-                onNext()
             },
             style =
                 OnboardingButtonStyle(
@@ -108,7 +102,6 @@ fun OnboardingContent(
 fun OnboardingScreenPreview() {
     OnboardingContent(
         onEvent = {},
-        onNext = {},
         modifier = Modifier.background(Color.White),
     )
 }
