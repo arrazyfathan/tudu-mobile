@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import org.koin.compose.koinInject
 
-class AuthPreferencesImpl(
+class SessionStorageImpl(
     private val dataStore: PrefsDataStore,
     private val ioDispatcher: CoroutineDispatcher,
-) : AuthPreferences {
+) : SessionStorage {
     override suspend fun isAuthenticated(): Boolean {
         val token = getAuthInfo()?.accessToken
         return !token.isNullOrBlank()
@@ -47,4 +47,4 @@ class AuthPreferencesImpl(
 }
 
 @Composable
-fun rememberAuthPreference(): AuthPreferences = koinInject()
+fun rememberAuthPreference(): SessionStorage = koinInject()

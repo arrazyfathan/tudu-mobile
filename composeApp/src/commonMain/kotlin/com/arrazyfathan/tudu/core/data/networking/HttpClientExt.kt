@@ -3,7 +3,7 @@ package com.arrazyfathan.tudu.core.data.networking
 import com.arrazyfathan.tudu.core.domain.utils.DataError
 import com.arrazyfathan.tudu.core.domain.utils.ErrorResponse
 import com.arrazyfathan.tudu.core.domain.utils.Result
-import com.arrazyfathan.tudu.core.preferences.AuthPreferences
+import com.arrazyfathan.tudu.core.preferences.SessionStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
@@ -167,7 +167,7 @@ fun constructRoute(route: String): String =
         else -> "$BASE_URL/$route"
     }
 
-suspend fun AuthPreferences.token(): String {
+suspend fun SessionStorage.token(): String {
     return this.getAuthInfo()?.accessToken ?: ""
 }
 

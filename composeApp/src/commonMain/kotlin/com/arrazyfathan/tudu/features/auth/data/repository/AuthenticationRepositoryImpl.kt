@@ -12,7 +12,7 @@ import com.arrazyfathan.tudu.core.domain.utils.EmptyResult
 import com.arrazyfathan.tudu.core.domain.utils.Result
 import com.arrazyfathan.tudu.core.domain.utils.asEmptyDataResult
 import com.arrazyfathan.tudu.core.domain.utils.map
-import com.arrazyfathan.tudu.core.preferences.AuthPreferences
+import com.arrazyfathan.tudu.core.preferences.SessionStorage
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginRequestDto
 import com.arrazyfathan.tudu.features.auth.data.dto.LoginResponseDto
 import com.arrazyfathan.tudu.features.auth.data.dto.LogoutRequestDto
@@ -26,7 +26,7 @@ import io.ktor.client.HttpClient
 
 class AuthenticationRepositoryImpl(
     private val httpClient: HttpClient,
-    private val authPreferences: AuthPreferences,
+    private val sessionStorage: SessionStorage,
 ) : AuthenticationRepository {
     override suspend fun login(
         username: String,
@@ -50,7 +50,7 @@ class AuthenticationRepositoryImpl(
                     refreshToken = loginData?.token?.refreshToken,
                     userId = loginData?.id,
                 )
-            authPreferences.save(authInfo)
+            sessionStorage.save(authInfo)
         }
 
         return response.map { it.data?.toUser() }
@@ -87,7 +87,7 @@ class AuthenticationRepositoryImpl(
                     ),
                 headers =
                     mapOf(
-                        authorizationHeader(authPreferences.token()),
+                        authorizationHeader(sessionStorage.token()),
                     ),
             )
 

@@ -1,10 +1,10 @@
 package com.arrazyfathan.tudu.di
 
 import com.arrazyfathan.tudu.core.data.networking.HttpClientFactory
-import com.arrazyfathan.tudu.core.preferences.AuthPreferences
-import com.arrazyfathan.tudu.core.preferences.AuthPreferencesImpl
 import com.arrazyfathan.tudu.core.preferences.PreferencesManager
 import com.arrazyfathan.tudu.core.preferences.PreferencesManagerImpl
+import com.arrazyfathan.tudu.core.preferences.SessionStorage
+import com.arrazyfathan.tudu.core.preferences.SessionStorageImpl
 import com.arrazyfathan.tudu.features.auth.data.repository.AuthenticationRepositoryImpl
 import com.arrazyfathan.tudu.features.auth.domain.repository.AuthenticationRepository
 import com.arrazyfathan.tudu.features.auth.domain.usecase.LoginUseCase
@@ -43,8 +43,8 @@ val sharedModule =
             PreferencesManagerImpl(get(), get(named("io")))
         }
 
-        single<AuthPreferences> {
-            AuthPreferencesImpl(get(), get(named("io")))
+        single<SessionStorage> {
+            SessionStorageImpl(get(), get(named("io")))
         }
 
         viewModelOf(::OnboardingViewModel)

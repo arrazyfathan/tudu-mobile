@@ -2,7 +2,7 @@ package com.arrazyfathan.tudu.core.preferences
 
 import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 
-interface AuthPreferences {
+interface SessionStorage {
     suspend fun isAuthenticated(): Boolean
 
     suspend fun getAuthInfo(): AuthInfo?

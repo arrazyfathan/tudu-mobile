@@ -4,23 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arrazyfathan.tudu.core.domain.utils.onError
 import com.arrazyfathan.tudu.core.domain.utils.onSuccess
-import com.arrazyfathan.tudu.core.preferences.AuthPreferences
+import com.arrazyfathan.tudu.core.preferences.SessionStorage
 import com.arrazyfathan.tudu.features.home.domain.usecase.LogoutUseCase
 import kotlinx.coroutines.launch
 
 class HomePageViewModel(
-    private val authPreferences: AuthPreferences,
+    private val sessionStorage: SessionStorage,
     private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
     fun logout(onSuccess: () -> Unit) {
         viewModelScope.launch {
-            val authInfo = authPreferences.getAuthInfo()
+            val authInfo = sessionStorage.getAuthInfo()
             logoutUseCase(
                 LogoutUseCase.Request(
                     refreshToken = authInfo?.refreshToken.orEmpty(),
                 ),
             ).onSuccess {
-                authPreferences.clear()
+                sessionStorage.clear()
                 onSuccess()
             }.onError {
             }

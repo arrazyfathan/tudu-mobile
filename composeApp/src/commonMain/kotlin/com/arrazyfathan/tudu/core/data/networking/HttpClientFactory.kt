@@ -3,7 +3,7 @@ package com.arrazyfathan.tudu.core.data.networking
 import com.arrazyfathan.tudu.core.domain.model.AuthInfo
 import com.arrazyfathan.tudu.core.domain.utils.ApiResponse
 import com.arrazyfathan.tudu.core.domain.utils.Result
-import com.arrazyfathan.tudu.core.preferences.AuthPreferences
+import com.arrazyfathan.tudu.core.preferences.SessionStorage
 import com.arrazyfathan.tudu.utils.PrettyLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
@@ -26,7 +26,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 
 class HttpClientFactory(
-    private val authPreferences: AuthPreferences,
+    private val sessionStorage: SessionStorage,
 ) {
     private val mutex = Mutex()
 
@@ -57,7 +57,7 @@ class HttpClientFactory(
             install(Auth) {
                 bearer {
                     loadTokens {
-                        val authInfo = authPreferences.getAuthInfo() ?: return@loadTokens null
+                        val authInfo = sessionStorage.getAuthInfo() ?: return@loadTokens null
 
                         BearerTokens(
                             accessToken = authInfo.accessToken.orEmpty(),
@@ -66,7 +66,7 @@ class HttpClientFactory(
                     }
                     refreshTokens {
                         mutex.withLock {
-                            val authInfo = authPreferences.getAuthInfo() ?: return@withLock null
+                            val authInfo = sessionStorage.getAuthInfo() ?: return@withLock null
 
                             val response =
                                 client.post<RefreshTokenRequest, ApiResponse<RefreshTokenResponse>>(
@@ -86,7 +86,7 @@ class HttpClientFactory(
                                         userId = data?.id,
                                     )
 
-                                authPreferences.save(newAuthInfo)
+                                sessionStorage.save(newAuthInfo)
 
                                 BearerTokens(
                                     accessToken = newAuthInfo.accessToken.orEmpty(),
@@ -105,7 +105,7 @@ class HttpClientFactory(
             HttpResponseValidator {
                 handleResponseExceptionWithRequest { exception, _ ->
                     if (exception is ClientRequestException && exception.response.status.value == 401) {
-                        authPreferences.clear()
+                        sessionStorage.clear()
                     }
                 }
             }
