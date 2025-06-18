@@ -10,14 +10,12 @@ import com.arrazyfathan.tudu.core.ui.components.DefaultButton
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomePageScreen(onLogout: () -> Unit) {
-    HomePageContent(
-        onLogout = onLogout,
-    )
+fun HomePageScreen() {
+    HomePageContent()
 }
 
 @Composable
-fun HomePageContent(onLogout: () -> Unit) {
+fun HomePageContent() {
     val viewModel = koinViewModel<HomePageViewModel>()
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -27,7 +25,7 @@ fun HomePageContent(onLogout: () -> Unit) {
         DefaultButton(
             text = "Logout",
             onClick = {
-                viewModel.logout { onLogout() }
+                viewModel.logout()
             },
         )
     }

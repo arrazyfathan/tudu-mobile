@@ -20,6 +20,8 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlin.coroutines.coroutineContext
 
 expect val BASE_URL: String
@@ -167,10 +169,6 @@ fun constructRoute(route: String): String =
         else -> "$BASE_URL/$route"
     }
 
-suspend fun SessionStorage.token(): String {
-    return this.getAuthInfo()?.accessToken ?: ""
-}
+suspend fun SessionStorage.token(): String = getAuthInfo().map { it?.accessToken.orEmpty() }.first()
 
-fun authorizationHeader(value: String): Pair<String, String> {
-    return "Authorization" to "Bearer $value"
-}
+fun authorizationHeader(value: String): Pair<String, String> = "Authorization" to "Bearer $value"

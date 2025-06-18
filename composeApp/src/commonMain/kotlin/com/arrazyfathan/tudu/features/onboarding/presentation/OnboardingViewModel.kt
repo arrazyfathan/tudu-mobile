@@ -4,32 +4,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arrazyfathan.tudu.core.preferences.PreferencesManager
 import com.arrazyfathan.tudu.core.preferences.SessionStorage
-import com.arrazyfathan.tudu.features.onboarding.presentation.components.OnboardingState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
     private val preferencesManager: PreferencesManager,
-    private val sessionStorage: SessionStorage,
+    sessionStorage: SessionStorage,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(OnboardingState())
-    val state = _state.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            _state.update { state -> state.copy(isChecking = true) }
-            _state.update { state ->
-                state.copy(
-                    isAuthenticated = sessionStorage.isAuthenticated(),
-                    isFirstTime = preferencesManager.isFirstTime.first(),
-                )
-            }
-            _state.update { state -> state.copy(isChecking = false) }
-        }
-    }
+    val state =
+        combine(
+            preferencesManager.isOnboarded,
+            sessionStorage.isAuthenticated(),
+        ) { isOnboarded, isAuthenticated ->
+            OnboardingState(
+                isOnboarded = isOnboarded,
+                isAuthenticated = isAuthenticated,
+                isChecking = false,
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = OnboardingState(isChecking = true),
+        )
 
     fun onEvent(action: OnboardingEvent) {
         when (action) {
@@ -41,7 +39,7 @@ class OnboardingViewModel(
 
     private fun changeOnboardingStatus() {
         viewModelScope.launch {
-            preferencesManager.setIsFirstTime(false)
+            preferencesManager.setIsOnboarded(true)
         }
     }
 }

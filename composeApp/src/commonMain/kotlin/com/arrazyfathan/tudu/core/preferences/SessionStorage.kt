@@ -1,11 +1,12 @@
 package com.arrazyfathan.tudu.core.preferences
 
 import com.arrazyfathan.tudu.core.domain.model.AuthInfo
+import kotlinx.coroutines.flow.Flow
 
 interface SessionStorage {
-    suspend fun isAuthenticated(): Boolean
+    fun isAuthenticated(): Flow<Boolean>
 
-    suspend fun getAuthInfo(): AuthInfo?
+    fun getAuthInfo(): Flow<AuthInfo?>
 
     suspend fun save(authInfo: AuthInfo)
 

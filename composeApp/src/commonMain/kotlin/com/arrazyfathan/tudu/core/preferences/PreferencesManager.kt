@@ -3,7 +3,7 @@ package com.arrazyfathan.tudu.core.preferences
 import kotlinx.coroutines.flow.Flow
 
 interface PreferencesManager {
-    val isFirstTime: Flow<Boolean>
+    val isOnboarded: Flow<Boolean>
 
-    suspend fun setIsFirstTime(value: Boolean)
+    suspend fun setIsOnboarded(value: Boolean)
 }

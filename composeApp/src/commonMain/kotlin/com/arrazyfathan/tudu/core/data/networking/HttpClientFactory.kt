@@ -21,6 +21,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
@@ -57,7 +58,7 @@ class HttpClientFactory(
             install(Auth) {
                 bearer {
                     loadTokens {
-                        val authInfo = sessionStorage.getAuthInfo() ?: return@loadTokens null
+                        val authInfo = sessionStorage.getAuthInfo().first() ?: return@loadTokens null
 
                         BearerTokens(
                             accessToken = authInfo.accessToken.orEmpty(),
@@ -66,7 +67,7 @@ class HttpClientFactory(
                     }
                     refreshTokens {
                         mutex.withLock {
-                            val authInfo = sessionStorage.getAuthInfo() ?: return@withLock null
+                            val authInfo = sessionStorage.getAuthInfo().first() ?: return@withLock null
 
                             val response =
                                 client.post<RefreshTokenRequest, ApiResponse<RefreshTokenResponse>>(

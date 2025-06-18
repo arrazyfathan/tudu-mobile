@@ -27,9 +27,9 @@ fun App() {
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         val destination =
-            if (state.isFirstTime) {
+            if (!state.isOnboarded) {
                 Routes.OnboardingGraph
-            } else if (!state.isFirstTime && !state.isAuthenticated) {
+            } else if (state.isOnboarded && !state.isAuthenticated) {
                 Routes.AuthGraph
             } else {
                 Routes.HomeGraph
