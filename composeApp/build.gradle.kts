@@ -15,6 +15,8 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 val versionPropertiesInputStream = FileInputStream("$rootDir/version.properties")
@@ -99,6 +101,9 @@ kotlin {
             implementation(libs.feather)
 
             implementation(libs.napier)
+
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.sqlite.bundled)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -149,8 +154,13 @@ android {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     debugImplementation(compose.uiTooling)
+    ksp(libs.androidx.room.compiler)
 }
 
 compose.desktop {
