@@ -1,4 +1,5 @@
 -keep class org.sqlite.** { *; }
+-keep class * extends androidx.room.RoomDatabase { <init>(); }
 
 -keepclasseswithmembers public class com.arrazyfathan.tudu.MainKt {  # <-- Change com.company to yours
     public static void main(java.lang.String[]);

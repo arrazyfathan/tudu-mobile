@@ -1,7 +1,10 @@
 package com.arrazyfathan.tudu.di
 
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.arrazyfathan.tudu.app.AppViewModel
 import com.arrazyfathan.tudu.core.data.networking.HttpClientFactory
+import com.arrazyfathan.tudu.core.database.DatabaseFactory
+import com.arrazyfathan.tudu.core.database.TuduDatabase
 import com.arrazyfathan.tudu.core.preferences.PreferencesManager
 import com.arrazyfathan.tudu.core.preferences.PreferencesManagerImpl
 import com.arrazyfathan.tudu.core.preferences.SessionStorage
@@ -47,6 +50,15 @@ val sharedModule =
         single<SessionStorage> {
             SessionStorageImpl(get(), get(named("io")))
         }
+
+        single {
+            get<DatabaseFactory>().create()
+                .setDriver(BundledSQLiteDriver())
+                .setQueryCoroutineContext(Dispatchers.IO)
+                .build()
+        }
+
+        single { get<TuduDatabase>().tuduDao }
 
         viewModelOf(::AppViewModel)
         viewModelOf(::OnboardingViewModel)
