@@ -9,4 +9,5 @@ object AppColors {
     val MoodBlue = Color(0xFF007BFF)
     val White = Color(0xFFFFFFFF)
     val Gray = Color(0xFF888888)
+    val Transparent = Color(0x00000000)
 }

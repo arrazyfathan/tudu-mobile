@@ -150,7 +150,10 @@ fun HomePageContent() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("Home Screen")
+                Text(
+                    "Home Screen",
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
+                )
             }
         }
     }
