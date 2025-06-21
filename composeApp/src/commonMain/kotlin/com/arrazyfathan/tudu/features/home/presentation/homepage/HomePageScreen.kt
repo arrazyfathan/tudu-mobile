@@ -1,21 +1,28 @@
 package com.arrazyfathan.tudu.features.home.presentation.homepage
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +33,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
@@ -34,10 +40,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arrazyfathan.tudu.core.ui.AppColors
@@ -45,7 +51,9 @@ import com.arrazyfathan.tudu.core.ui.VerticalSpacer
 import com.arrazyfathan.tudu.core.ui.components.CustomDialog
 import com.arrazyfathan.tudu.core.ui.components.dismiss
 import com.arrazyfathan.tudu.core.ui.components.show
+import com.arrazyfathan.tudu.features.home.domain.model.dummyJournal
 import com.arrazyfathan.tudu.features.home.presentation.components.DialogLogout
+import com.arrazyfathan.tudu.features.home.presentation.components.JournalItem
 import com.composables.core.rememberDialogState
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.LogOut
@@ -151,78 +159,94 @@ fun HomePageContent() {
         }
     }) {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        Scaffold(
-            topBar = {
-                CenterAlignedTopAppBar(
-                    colors =
-                        TopAppBarDefaults.topAppBarColors(
-                            containerColor = AppColors.White,
-                            scrolledContainerColor = AppColors.White,
-                            navigationIconContentColor = Color.Black,
-                            titleContentColor = Color.Black,
-                            actionIconContentColor = Color.Black,
-                        ),
-                    title = {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_logo_100),
-                            contentDescription = "Logo",
-                            alignment = Alignment.Center,
-                            modifier = Modifier.size(34.dp),
-                        )
-                    },
-                    expandedHeight = 90.dp,
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        IconButton(modifier = Modifier.padding(start = 4.dp), onClick = {
-                            scope.launch {
-                                drawerState.open()
-                            }
-                        }) {
-                            Icon(
-                                imageVector = FeatherIcons.Menu,
-                                contentDescription = "Menu",
-                                tint = Color.Black,
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(modifier = Modifier.padding(end = 4.dp), onClick = {}) {
-                            Icon(
-                                imageVector = FeatherIcons.User,
-                                contentDescription = "Notifications",
-                                tint = Color.Black,
-                            )
-                        }
-                    },
-                )
-            },
+
+        Box(
             modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
-            containerColor = AppColors.White,
-        ) { paddingValues ->
+        ) {
             LazyColumn(
-                modifier =
-                    Modifier.fillMaxSize().padding(
-                        top = paddingValues.calculateTopPadding(),
-                        bottom = 0.dp,
-                        start = 16.dp,
-                        end = 16.dp,
-                    ),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize(),
             ) {
-                items(50) {
-                    Card(
-                        modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                item {
+                    VerticalSpacer(90.dp)
+                }
+
+                item {
+                    LazyVerticalStaggeredGrid(
+                        modifier = Modifier.fillMaxWidth().heightIn(max = 2000.dp),
+                        columns = StaggeredGridCells.Fixed(2),
+                        userScrollEnabled = false,
+                        verticalItemSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(16.dp),
                     ) {
-                        Text(
-                            modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp),
-                            text = "Home Screen",
-                            textAlign = TextAlign.Start,
-                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
-                        )
+                        val dummyJournal = dummyJournal
+                        items(dummyJournal) { journal ->
+                            JournalItem(journal, onClick = {
+                            })
+                        }
                     }
                 }
             }
+
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colorStops =
+                                        arrayOf(
+                                            0.0f to Color.White,
+                                            0.3f to Color.White,
+                                            1.0f to Color.Transparent,
+                                        ),
+                                ),
+                        ).height(100.dp),
+            )
+
+            CenterAlignedTopAppBar(
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = AppColors.White,
+                        scrolledContainerColor = AppColors.White,
+                        navigationIconContentColor = Color.Black,
+                        titleContentColor = Color.Black,
+                        actionIconContentColor = Color.Black,
+                    ),
+                title = {
+                    Image(
+                        painter = painterResource(Res.drawable.ic_logo_100),
+                        contentDescription = "Logo",
+                        alignment = Alignment.Center,
+                        modifier = Modifier.size(34.dp),
+                    )
+                },
+                expandedHeight = 70.dp,
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(modifier = Modifier.padding(start = 4.dp), onClick = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = FeatherIcons.Menu,
+                            contentDescription = "Menu",
+                            tint = Color.Black,
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(modifier = Modifier.padding(end = 4.dp), onClick = {}) {
+                        Icon(
+                            imageVector = FeatherIcons.User,
+                            contentDescription = "Notifications",
+                            tint = Color.Black,
+                        )
+                    }
+                },
+            )
         }
     }
 }
