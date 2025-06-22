@@ -65,6 +65,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import tudu.composeapp.generated.resources.Res
 import tudu.composeapp.generated.resources.ic_logo_100
 
+expect val boxHeight: Int
+
 @Composable
 fun HomePageScreen() {
     HomePageContent()
@@ -167,7 +169,7 @@ fun HomePageContent() {
                 modifier = Modifier.fillMaxSize(),
             ) {
                 item {
-                    VerticalSpacer(90.dp)
+                    VerticalSpacer(boxHeight.dp)
                 }
 
                 item {
@@ -181,8 +183,7 @@ fun HomePageContent() {
                     ) {
                         val dummyJournal = dummyJournal
                         items(dummyJournal) { journal ->
-                            JournalItem(journal, onClick = {
-                            })
+                            JournalItem(journal, onClick = {})
                         }
                     }
                 }
@@ -198,11 +199,11 @@ fun HomePageContent() {
                                     colorStops =
                                         arrayOf(
                                             0.0f to Color.White,
-                                            0.3f to Color.White,
+                                            0.5f to Color.White,
                                             1.0f to Color.Transparent,
                                         ),
                                 ),
-                        ).height(100.dp),
+                        ).height(90.dp),
             )
 
             CenterAlignedTopAppBar(

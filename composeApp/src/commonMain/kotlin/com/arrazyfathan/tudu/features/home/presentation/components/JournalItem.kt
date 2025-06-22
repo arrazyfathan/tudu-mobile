@@ -1,9 +1,12 @@
 package com.arrazyfathan.tudu.features.home.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -61,6 +64,17 @@ fun JournalItem(
                     ),
                 maxLines = 3,
             )
+
+            VerticalSpacer(20.dp)
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(2.dp),
+            ) {
+                items(journal.tags) { tag ->
+                    TagItem(tag = tag)
+                }
+            }
         }
     }
 }
