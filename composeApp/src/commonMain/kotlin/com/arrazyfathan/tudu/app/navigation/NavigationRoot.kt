@@ -1,18 +1,18 @@
 package com.arrazyfathan.tudu.app.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.arrazyfathan.tudu.features.auth.presentation.navigation.authGraph
 import com.arrazyfathan.tudu.features.home.presentation.navigation.homeGraph
 import com.arrazyfathan.tudu.features.onboarding.presentation.navigation.onboardingGraph
+import com.arrazyfathan.tudu.utils.Material3Transitions
 
 @Composable
 fun NavigationRoot(
@@ -22,27 +22,16 @@ fun NavigationRoot(
     var previousScreen by remember { mutableStateOf<Routes?>(null) }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: startDestination
+    val density = LocalDensity.current
 
     NavHost(navController = navController, startDestination = startDestination, enterTransition = {
-        slideIntoContainer(
-            AnimatedContentTransitionScope.SlideDirection.Left,
-            animationSpec = tween(500),
-        )
-    }, exitTransition = {
-        slideOutOfContainer(
-            AnimatedContentTransitionScope.SlideDirection.Left,
-            animationSpec = tween(500),
-        )
+        Material3Transitions.SharedXAxisEnterTransition(density)
     }, popEnterTransition = {
-        slideIntoContainer(
-            AnimatedContentTransitionScope.SlideDirection.Right,
-            animationSpec = tween(500),
-        )
+        Material3Transitions.SharedXAxisPopEnterTransition(density)
+    }, exitTransition = {
+        Material3Transitions.SharedXAxisExitTransition(density)
     }, popExitTransition = {
-        slideOutOfContainer(
-            AnimatedContentTransitionScope.SlideDirection.Right,
-            animationSpec = tween(500),
-        )
+        Material3Transitions.SharedXAxisPopExitTransition(density)
     }) {
         onboardingGraph(navController)
         authGraph(navController)

@@ -1,4 +1,4 @@
 package com.arrazyfathan.tudu.features.home.presentation.homepage
 
-actual val boxHeight: Int
+actual val blankSpaceItemHeight: Int
     get() = 120

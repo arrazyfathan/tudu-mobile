@@ -65,7 +65,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import tudu.composeapp.generated.resources.Res
 import tudu.composeapp.generated.resources.ic_logo_100
 
-expect val boxHeight: Int
+expect val blankSpaceItemHeight: Int
 
 @Composable
 fun HomePageScreen() {
@@ -169,7 +169,7 @@ fun HomePageContent() {
                 modifier = Modifier.fillMaxSize(),
             ) {
                 item {
-                    VerticalSpacer(boxHeight.dp)
+                    VerticalSpacer(blankSpaceItemHeight.dp)
                 }
 
                 item {
@@ -200,6 +200,7 @@ fun HomePageContent() {
                                         arrayOf(
                                             0.0f to Color.White,
                                             0.5f to Color.White,
+                                            0.65f to Color.White,
                                             1.0f to Color.Transparent,
                                         ),
                                 ),
