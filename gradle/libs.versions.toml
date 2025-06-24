@@ -17,6 +17,7 @@ composables = "1.33.0"
 core-splash-screen = "1.0.1"
 feather = "1.1.1"
 firebase-bom = "33.14.0"
+haze = "1.6.4"
 junit = "4.13.2"
 kotlin = "2.1.21"
 kotlinx-coroutines = "1.10.2"
@@ -42,6 +43,7 @@ feather = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "f
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }

@@ -106,6 +106,7 @@ kotlin {
             implementation(libs.sqlite.bundled)
 
             implementation(libs.composables.core)
+            implementation(libs.haze)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
