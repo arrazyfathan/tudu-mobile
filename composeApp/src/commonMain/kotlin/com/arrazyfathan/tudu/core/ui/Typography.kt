@@ -7,6 +7,12 @@ import androidx.compose.ui.text.font.FontWeight
 import org.jetbrains.compose.resources.Font
 import tudu.composeapp.generated.resources.Res
 import tudu.composeapp.generated.resources.cyrene
+import tudu.composeapp.generated.resources.editorial_italic
+import tudu.composeapp.generated.resources.editorial_regular
+import tudu.composeapp.generated.resources.editorial_ultrabold
+import tudu.composeapp.generated.resources.editorial_ultrabolditalic
+import tudu.composeapp.generated.resources.editorial_ultralight
+import tudu.composeapp.generated.resources.editorial_ultralightitalic
 import tudu.composeapp.generated.resources.inter_black
 import tudu.composeapp.generated.resources.inter_bold
 import tudu.composeapp.generated.resources.inter_extrabold
@@ -29,6 +35,17 @@ fun InterFontFamily() =
         Font(Res.font.inter_bold, weight = FontWeight.Bold),
         Font(Res.font.inter_black, weight = FontWeight.Black),
         Font(Res.font.inter_extrabold, weight = FontWeight.ExtraBold),
+    )
+
+@Composable
+fun EditorialOldFontFamily() =
+    FontFamily(
+        Font(Res.font.editorial_regular, weight = FontWeight.Normal),
+        Font(Res.font.editorial_italic, weight = FontWeight.Normal),
+        Font(Res.font.editorial_ultralight, weight = FontWeight.ExtraLight),
+        Font(Res.font.editorial_ultrabold, weight = FontWeight.ExtraBold),
+        Font(Res.font.editorial_ultrabolditalic, weight = FontWeight.Bold),
+        Font(Res.font.editorial_ultralightitalic, weight = FontWeight.ExtraLight),
     )
 
 @Composable
