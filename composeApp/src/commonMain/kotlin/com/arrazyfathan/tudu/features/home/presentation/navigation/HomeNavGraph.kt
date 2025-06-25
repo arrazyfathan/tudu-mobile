@@ -14,7 +14,11 @@ fun NavController.navigateToHome(builder: NavOptionsBuilder.() -> Unit) = naviga
 fun NavGraphBuilder.homeGraph(navController: NavHostController) {
     navigation<Routes.HomeGraph>(startDestination = Routes.Home) {
         composable<Routes.Home> {
-            HomePageScreen()
+            HomePageScreen(
+                navigateToProfile = { },
+                navigateToCreateNewJournal = { },
+                navigateToSearch = { },
+            )
         }
     }
 }

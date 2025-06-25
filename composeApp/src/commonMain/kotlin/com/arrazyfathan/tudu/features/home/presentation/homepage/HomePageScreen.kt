@@ -34,6 +34,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -49,7 +50,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -73,16 +76,19 @@ import com.arrazyfathan.tudu.features.home.presentation.components.FloatingActio
 import com.arrazyfathan.tudu.features.home.presentation.components.FloatingButton
 import com.arrazyfathan.tudu.features.home.presentation.components.JournalItem
 import com.arrazyfathan.tudu.features.home.presentation.components.buttons
+import com.composables.core.DialogState
 import com.composables.core.rememberDialogState
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.LogOut
 import compose.icons.feathericons.Menu
 import compose.icons.feathericons.User
+import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.rememberHazeState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -92,15 +98,34 @@ import tudu.composeapp.generated.resources.ic_logo_100
 expect val blankSpaceItemHeight: Int
 
 @Composable
-fun HomePageScreen() {
-    HomePageContent()
+fun HomePageScreen(
+    navigateToProfile: () -> Unit,
+    navigateToCreateNewJournal: () -> Unit,
+    navigateToSearch: () -> Unit,
+    viewModel: HomePageViewModel = koinViewModel(),
+) {
+    val state by viewModel.state.collectAsState()
+
+    HomePageContent(
+        state = state,
+        onAction = { action ->
+            when (action) {
+                HomeAction.OnCreateNewJournal -> navigateToCreateNewJournal()
+                HomeAction.OnProfileClick -> navigateToProfile()
+                HomeAction.OnSearch -> navigateToSearch()
+                else -> Unit
+            }
+            viewModel.onAction(action)
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePageContent() {
-    val viewModel = koinViewModel<HomePageViewModel>()
-
+fun HomePageContent(
+    state: HomeState,
+    onAction: (HomeAction) -> Unit,
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val dialogState = rememberDialogState()
@@ -126,7 +151,7 @@ fun HomePageContent() {
         shape = RoundedCornerShape(30.dp),
     ) {
         DialogLogout {
-            viewModel.logout()
+            onAction(HomeAction.OnLogout)
             dialogState.dismiss()
         }
     }
@@ -142,59 +167,7 @@ fun HomePageContent() {
             drawerContainerColor = AppColors.Black,
             drawerContentColor = Color.White,
         ) {
-            Column(
-                modifier =
-                    Modifier
-                        .padding(horizontal = 16.dp)
-                        .verticalScroll(rememberScrollState()),
-            ) {
-                VerticalSpacer(50.dp)
-                Text(
-                    modifier = Modifier.width(250.dp).padding(start = 16.dp),
-                    text = "You have a beautiful journal, Ar Razy Fathan Rabbani",
-                    style =
-                        MaterialTheme.typography.displaySmall.copy(
-                            color = Color.White,
-                        ),
-                )
-                HorizontalDivider(
-                    modifier =
-                        Modifier.padding(
-                            vertical = 24.dp,
-                            horizontal = 16.dp,
-                        ),
-                )
-                VerticalSpacer(350.dp)
-                NavigationDrawerItem(
-                    label = {
-                        Text(
-                            "Logout",
-                            style =
-                                MaterialTheme.typography.bodyLarge.copy(
-                                    fontSize = 16.sp,
-                                    fontWeight = FontWeight.Medium,
-                                ),
-                            color = AppColors.White,
-                        )
-                    },
-                    selected = false,
-                    onClick = {
-                        dialogState.show()
-                        scope.launch {
-                            drawerState.close()
-                        }
-                    },
-                    icon = {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = FeatherIcons.LogOut,
-                            contentDescription = "Logout",
-                            tint = Color.White,
-                        )
-                    },
-                )
-                VerticalSpacer(24.dp)
-            }
+            DrawerContent(hazeState, dialogState, scope, drawerState)
         }
     }) {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -335,5 +308,76 @@ fun HomePageContent() {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun DrawerContent(
+    hazeState: HazeState,
+    dialogState: DialogState,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+) {
+    Column(
+        modifier =
+            Modifier.fillMaxSize().hazeEffect(
+                state = hazeState,
+                style =
+                    HazeStyle(
+                        backgroundColor = Color.White,
+                        tint =
+                            HazeTint(
+                                color = AppColors.Black.copy(alpha = 0.7f),
+                            ),
+                        blurRadius = 30.dp,
+                    ),
+            ).padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),
+    ) {
+        VerticalSpacer(50.dp)
+        Text(
+            modifier = Modifier.width(250.dp).padding(start = 16.dp),
+            text = "You have a beautiful journal, Ar Razy Fathan Rabbani",
+            style =
+                MaterialTheme.typography.displaySmall.copy(
+                    color = Color.White,
+                ),
+        )
+        HorizontalDivider(
+            modifier =
+                Modifier.padding(
+                    vertical = 24.dp,
+                    horizontal = 16.dp,
+                ),
+        )
+        VerticalSpacer(350.dp)
+        NavigationDrawerItem(
+            label = {
+                Text(
+                    "Logout",
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    color = AppColors.White,
+                )
+            },
+            selected = false,
+            onClick = {
+                dialogState.show()
+                scope.launch {
+                    drawerState.close()
+                }
+            },
+            icon = {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = FeatherIcons.LogOut,
+                    contentDescription = "Logout",
+                    tint = Color.White,
+                )
+            },
+        )
+        VerticalSpacer(24.dp)
     }
 }
