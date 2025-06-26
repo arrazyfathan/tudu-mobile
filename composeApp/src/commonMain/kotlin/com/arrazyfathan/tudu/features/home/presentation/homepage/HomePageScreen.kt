@@ -12,22 +12,22 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -38,7 +38,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,21 +50,26 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arrazyfathan.tudu.core.ui.AppColors
+import com.arrazyfathan.tudu.core.ui.EditorialOldFontFamily
 import com.arrazyfathan.tudu.core.ui.VerticalSpacer
 import com.arrazyfathan.tudu.core.ui.components.CustomDialog
 import com.arrazyfathan.tudu.core.ui.components.dismiss
@@ -91,6 +95,7 @@ import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import tudu.composeapp.generated.resources.Res
 import tudu.composeapp.generated.resources.ic_logo_100
@@ -130,16 +135,26 @@ fun HomePageContent(
     val scope = rememberCoroutineScope()
     val dialogState = rememberDialogState()
     val hazeState = rememberHazeState()
-    val listState = rememberLazyListState()
+    val listState = rememberLazyStaggeredGridState()
+    val isVisible = rememberSaveable { mutableStateOf(true) }
 
-    val previousScrollOffset = remember { mutableStateOf(0) }
-    val fabVisible =
+    val nestedScrollConnection =
         remember {
-            derivedStateOf {
-                val offset = listState.firstVisibleItemScrollOffset
-                val visible = previousScrollOffset.value >= offset || offset == 0
-                previousScrollOffset.value = offset
-                visible
+            object : NestedScrollConnection {
+                override fun onPreScroll(
+                    available: Offset,
+                    source: NestedScrollSource,
+                ): Offset {
+                    if (available.y < -1) {
+                        isVisible.value = false
+                    }
+
+                    if (available.y > 1) {
+                        isVisible.value = true
+                    }
+
+                    return Offset.Zero
+                }
             }
         }
 
@@ -177,7 +192,7 @@ fun HomePageContent(
             floatingActionButtonPosition = FabPosition.Center,
             floatingActionButton = {
                 AnimatedVisibility(
-                    visible = fabVisible.value,
+                    visible = isVisible.value,
                     enter = fadeIn() + scaleIn(),
                     exit = fadeOut() + scaleOut(),
                 ) {
@@ -221,28 +236,29 @@ fun HomePageContent(
             Box(
                 modifier = Modifier.fillMaxSize(),
             ) {
-                LazyColumn(
+                LazyVerticalStaggeredGrid(
                     state = listState,
-                    modifier = Modifier.hazeSource(hazeState).fillMaxSize(),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .hazeSource(hazeState)
+                            .nestedScroll(nestedScrollConnection),
+                    columns = StaggeredGridCells.Fixed(2),
+                    verticalItemSpacing = 8.dp,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(16.dp),
                 ) {
-                    item {
+                    item(span = StaggeredGridItemSpan.FullLine) {
                         VerticalSpacer(blankSpaceItemHeight.dp)
                     }
 
-                    item {
-                        LazyVerticalStaggeredGrid(
-                            modifier = Modifier.fillMaxWidth().heightIn(max = 2000.dp),
-                            columns = StaggeredGridCells.Fixed(2),
-                            userScrollEnabled = false,
-                            verticalItemSpacing = 8.dp,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            contentPadding = PaddingValues(16.dp),
-                        ) {
-                            val dummyJournal = dummyJournal
-                            items(dummyJournal) { journal ->
-                                JournalItem(journal, onClick = {})
-                            }
-                        }
+                    val dummyJournal = dummyJournal
+                    items(dummyJournal) { journal ->
+                        JournalItem(journal, onClick = {})
+                    }
+
+                    item(span = StaggeredGridItemSpan.FullLine) {
+                        VerticalSpacer(54.dp)
                     }
                 }
 
@@ -320,36 +336,35 @@ private fun DrawerContent(
 ) {
     Column(
         modifier =
-            Modifier.fillMaxSize().hazeEffect(
-                state = hazeState,
-                style =
-                    HazeStyle(
-                        backgroundColor = Color.White,
-                        tint =
-                            HazeTint(
-                                color = AppColors.Black.copy(alpha = 0.7f),
-                            ),
-                        blurRadius = 30.dp,
-                    ),
-            ).padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),
+            Modifier
+                .fillMaxSize()
+                .hazeEffect(
+                    state = hazeState,
+                    style =
+                        HazeStyle(
+                            backgroundColor = Color.White,
+                            tint =
+                                HazeTint(
+                                    color = AppColors.Black.copy(alpha = 0.7f),
+                                ),
+                            blurRadius = 30.dp,
+                        ),
+                ).padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
         VerticalSpacer(50.dp)
         Text(
             modifier = Modifier.width(250.dp).padding(start = 16.dp),
             text = "You have a beautiful journal, Ar Razy Fathan Rabbani",
-            style =
-                MaterialTheme.typography.displaySmall.copy(
-                    color = Color.White,
-                ),
+            fontFamily = EditorialOldFontFamily(),
+            fontWeight = FontWeight.Normal,
+            fontStyle = FontStyle.Normal,
+            fontSize = 30.sp,
+            lineHeight = 38.sp,
         )
-        HorizontalDivider(
-            modifier =
-                Modifier.padding(
-                    vertical = 24.dp,
-                    horizontal = 16.dp,
-                ),
-        )
-        VerticalSpacer(350.dp)
+
+        Spacer(modifier = Modifier.weight(1f))
+
         NavigationDrawerItem(
             label = {
                 Text(
@@ -378,6 +393,12 @@ private fun DrawerContent(
                 )
             },
         )
-        VerticalSpacer(24.dp)
+        VerticalSpacer(16.dp)
     }
+}
+
+@Preview
+@Composable
+fun HomePagePreview() {
+    HomePageContent(HomeState(), {})
 }

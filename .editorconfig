@@ -6,6 +6,7 @@ ktlint_standard_no-wildcard-imports = disabled
 ktlint_standard_function-naming = disabled
 ktlint_function_naming_ignore_when_annotated_with = Composable
 
+
 [**/build/**/*.kt]
 ktlint = disabled
 

@@ -14,11 +14,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arrazyfathan.tudu.core.ui.AppColors
+import com.arrazyfathan.tudu.core.ui.EditorialOldFontFamily
 import com.arrazyfathan.tudu.core.ui.VerticalSpacer
 import com.arrazyfathan.tudu.features.home.domain.model.DummyJournal
+import com.arrazyfathan.tudu.features.home.domain.model.dummyJournal
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun JournalItem(
@@ -47,12 +52,11 @@ fun JournalItem(
         ) {
             Text(
                 text = journal.title,
-                style =
-                    MaterialTheme.typography.titleMedium.copy(
-                        color = AppColors.Black,
-                        fontSize = 18.sp,
-                    ),
+                fontFamily = EditorialOldFontFamily(),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Normal,
                 maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
             VerticalSpacer(10.dp)
             Text(
@@ -62,7 +66,8 @@ fun JournalItem(
                         color = AppColors.Black.copy(alpha = 0.5f),
                         fontSize = 14.sp,
                     ),
-                maxLines = 3,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
             )
 
             VerticalSpacer(20.dp)
@@ -77,4 +82,13 @@ fun JournalItem(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun JournalItemPreview() {
+    JournalItem(
+        journal = dummyJournal[0],
+        onClick = {},
+    )
 }
