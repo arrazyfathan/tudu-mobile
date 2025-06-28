@@ -107,6 +107,8 @@ kotlin {
 
             implementation(libs.composables.core)
             implementation(libs.haze)
+
+            implementation(libs.paging.compose.common)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
