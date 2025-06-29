@@ -315,7 +315,9 @@ fun HomePageContent(
                         }
                     },
                     actions = {
-                        IconButton(modifier = Modifier.padding(end = 4.dp), onClick = {}) {
+                        IconButton(modifier = Modifier.padding(end = 4.dp), onClick = {
+                            onAction(HomeAction.OnProfileClick)
+                        }) {
                             Icon(
                                 imageVector = FeatherIcons.User,
                                 contentDescription = "Notifications",

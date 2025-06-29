@@ -34,6 +34,7 @@ val versionNameProperty = "$versionMajorProperty.$versionMinorProperty.$versionP
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
+        freeCompilerArgs.add("-Xbinary=bundleId=com.arrazyfathan.Tudu")
     }
 
     androidTarget {

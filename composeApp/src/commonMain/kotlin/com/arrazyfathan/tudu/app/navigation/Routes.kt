@@ -23,4 +23,10 @@ sealed interface Routes {
 
     @Serializable
     data object Home : Routes
+
+    @Serializable
+    data object ProfileGraph : Routes
+
+    @Serializable
+    data object Profile : Routes
 }
