@@ -211,11 +211,13 @@ buildkonfig {
     defaultConfigs {
         buildConfigField(FieldSpec.Type.STRING, "APP_NAME", "Tudu")
         buildConfigField(FieldSpec.Type.STRING, "DEFAULT_BASE_URL", "http://localhost:3000")
+        buildConfigField(FieldSpec.Type.STRING, "APP_VERSION_NAME", versionNameProperty)
     }
 
     defaultConfigs("development") {
         buildConfigField(FieldSpec.Type.STRING, "APP_NAME", "Tudu")
         buildConfigField(FieldSpec.Type.STRING, "DEFAULT_BASE_URL", "http://localhost:3000")
+        buildConfigField(FieldSpec.Type.STRING, "APP_VERSION_NAME", "$versionNameProperty-dev")
     }
 
     defaultConfigs("production") {

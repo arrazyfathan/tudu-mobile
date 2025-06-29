@@ -66,8 +66,10 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.arrazyfathan.tudu.BuildKonfig
 import com.arrazyfathan.tudu.core.ui.AppColors
 import com.arrazyfathan.tudu.core.ui.EditorialOldFontFamily
 import com.arrazyfathan.tudu.core.ui.VerticalSpacer
@@ -392,6 +394,14 @@ private fun DrawerContent(
                     tint = Color.White,
                 )
             },
+        )
+        VerticalSpacer(16.dp)
+        Text(
+            text = "v.${BuildKonfig.APP_VERSION_NAME}",
+            style = MaterialTheme.typography.bodySmall,
+            color = AppColors.White.copy(alpha = .7f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
         )
         VerticalSpacer(16.dp)
     }
