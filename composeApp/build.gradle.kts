@@ -167,7 +167,15 @@ room {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-    ksp(libs.androidx.room.compiler)
+    listOf(
+        "kspAndroid",
+        "kspIosArm64",
+        "kspIosX64",
+        "kspIosSimulatorArm64",
+        "kspDesktop"
+    ).forEach { target ->
+        add(configurationName = target, dependencyNotation = libs.androidx.room.compiler)
+    }
 }
 
 compose.desktop {
