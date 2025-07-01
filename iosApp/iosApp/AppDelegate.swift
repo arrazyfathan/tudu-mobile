@@ -7,11 +7,13 @@
 import Foundation
 import SwiftUI
 import ComposeApp
+import Firebase
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     private let appDelegateAdapter = AppDelegateAdapter()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-            return appDelegateAdapter.application(application: application, didFinishLaunchingWithOptions: launchOptions)
-        }
+        FirebaseApp.configure()
+        return appDelegateAdapter.application(application: application, didFinishLaunchingWithOptions: launchOptions)
+    }
 }
