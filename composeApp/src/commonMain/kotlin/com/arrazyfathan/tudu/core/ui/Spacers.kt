@@ -1,5 +1,7 @@
 package com.arrazyfathan.tudu.core.ui
 
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -22,4 +24,24 @@ fun VerticalSpacer(spacing: Dp = SpacerSize.Medium) {
 @Composable
 fun HorizontalSpacer(spacing: Dp = SpacerSize.Medium) {
     Spacer(modifier = Modifier.width(spacing))
+}
+
+@Composable
+fun RowScope.VerticalFill(weight: Float = 1f) {
+    Spacer(modifier = Modifier.weight(weight))
+}
+
+@Composable
+fun ColumnScope.VerticalFill(weight: Float = 1f) {
+    Spacer(modifier = Modifier.weight(weight))
+}
+
+@Composable
+fun ColumnScope.HorizontalFill(weight: Float = 1f) {
+    Spacer(modifier = Modifier.weight(weight))
+}
+
+@Composable
+fun RowScope.HorizontalFill(weight: Float = 1f) {
+    Spacer(modifier = Modifier.weight(weight))
 }
