@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arrazyfathan.tudu.core.ui.AppColors
 import com.arrazyfathan.tudu.core.ui.HorizontalSpacer
+import com.arrazyfathan.tudu.utils.bounceClick
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Plus
 import compose.icons.feathericons.Search
@@ -65,12 +66,16 @@ fun FloatingActionContainer(
         LocalContentColor provides AppColors.White,
     ) {
         Row(
-            modifier = Modifier.wrapContentHeight().wrapContentWidth().padding(top = 6.dp, bottom = 6.dp, start = 3.dp, end = 3.dp),
+            modifier =
+                Modifier
+                    .wrapContentHeight()
+                    .wrapContentWidth()
+                    .padding(top = 6.dp, bottom = 6.dp, start = 3.dp, end = 3.dp),
         ) {
             for (tab in tabs) {
                 HorizontalSpacer(3.dp)
                 IconButton(
-                    modifier = Modifier.size(54.dp),
+                    modifier = Modifier.bounceClick().size(54.dp),
                     onClick = { onActionSelected(tab) },
                     colors =
                         IconButtonDefaults.iconButtonColors(
