@@ -36,6 +36,7 @@ sqlite = "2.5.2"
 room = "2.7.2"
 ksp = "2.2.0-2.0.2"
 paging = "3.3.0-alpha02-0.5.1"
+rich-text-editor="1.0.0-rc13"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splash-screen" }
@@ -96,6 +97,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
 paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "paging" }
+rich-text-editor = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "rich-text-editor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

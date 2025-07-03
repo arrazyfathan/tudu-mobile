@@ -111,6 +111,8 @@ kotlin {
             implementation(libs.haze)
 
             implementation(libs.paging.compose.common)
+
+            implementation(libs.rich.text.editor)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
