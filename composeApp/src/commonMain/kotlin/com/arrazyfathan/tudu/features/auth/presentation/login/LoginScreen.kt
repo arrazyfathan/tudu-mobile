@@ -76,7 +76,12 @@ fun LoginContent(
     onSignUpClicked: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(16.dp).fillMaxSize().verticalScroll(rememberScrollState()).imePadding(),
+        modifier =
+            Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .imePadding(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start,
     ) {

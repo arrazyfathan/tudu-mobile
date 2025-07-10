@@ -6,11 +6,10 @@ import okio.Path.Companion.toPath
 
 typealias PrefsDataStore = DataStore<Preferences>
 
-fun createDataStore(producePath: () -> String): PrefsDataStore {
-    return PreferenceDataStoreFactory.createWithPath(
+fun createDataStore(producePath: () -> String): PrefsDataStore =
+    PreferenceDataStoreFactory.createWithPath(
         produceFile = { producePath().toPath() },
     )
-}
 
 internal const val DATA_STORE_FILE_NAME = "tudu.preferences_pb"
 

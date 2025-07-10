@@ -5,11 +5,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 
-fun createDataStore(context: Context): DataStore<Preferences> {
-    return createDataStore(
+fun createDataStore(context: Context): DataStore<Preferences> =
+    createDataStore(
         producePath = { context.filesDir.resolve(DATA_STORE_FILE_NAME).absolutePath },
     )
-}
 
 @Composable
 actual fun rememberDataStore(): PrefsDataStore {

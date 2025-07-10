@@ -25,6 +25,4 @@ fun createDataStore(): DataStore<Preferences> =
     )
 
 @Composable
-actual fun rememberDataStore(): PrefsDataStore {
-    return remember { createDataStore() }
-}
+actual fun rememberDataStore(): PrefsDataStore = remember { createDataStore() }

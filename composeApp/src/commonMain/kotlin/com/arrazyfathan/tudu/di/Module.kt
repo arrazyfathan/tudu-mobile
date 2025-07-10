@@ -52,7 +52,8 @@ val sharedModule =
         }
 
         single {
-            get<DatabaseFactory>().create()
+            get<DatabaseFactory>()
+                .create()
                 .setDriver(BundledSQLiteDriver())
                 .setQueryCoroutineContext(Dispatchers.IO)
                 .build()

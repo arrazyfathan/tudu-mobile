@@ -51,28 +51,16 @@ fun OnboardingButton(
 
     Box(
         modifier =
-            modifier.fillMaxWidth().safeClickable(
-                onClick = onClick,
-                interactionSource = interactionSource,
-                indication = null,
-            ).drawWithCache {
-                onDrawBehind {
-                    drawRoundRect(
-                        color = style.pressedColor,
-                        cornerRadius =
-                            CornerRadius(
-                                style.cornerRadius.toPx(),
-                                style.cornerRadius.toPx(),
-                            ),
-                        size =
-                            Size(
-                                size.width,
-                                size.height,
-                            ),
-                    )
-                    if (!isPressed) {
+            modifier
+                .fillMaxWidth()
+                .safeClickable(
+                    onClick = onClick,
+                    interactionSource = interactionSource,
+                    indication = null,
+                ).drawWithCache {
+                    onDrawBehind {
                         drawRoundRect(
-                            color = style.normalColor,
+                            color = style.pressedColor,
                             cornerRadius =
                                 CornerRadius(
                                     style.cornerRadius.toPx(),
@@ -81,25 +69,41 @@ fun OnboardingButton(
                             size =
                                 Size(
                                     size.width,
-                                    size.height - style.offset.toPx(),
+                                    size.height,
                                 ),
                         )
+                        if (!isPressed) {
+                            drawRoundRect(
+                                color = style.normalColor,
+                                cornerRadius =
+                                    CornerRadius(
+                                        style.cornerRadius.toPx(),
+                                        style.cornerRadius.toPx(),
+                                    ),
+                                size =
+                                    Size(
+                                        size.width,
+                                        size.height - style.offset.toPx(),
+                                    ),
+                            )
+                        }
                     }
-                }
-            },
+                },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier =
-                Modifier.padding(
-                    top = style.verticalPadding,
-                    bottom = style.verticalPadding,
-                    start = style.horizontalPadding,
-                    end = style.horizontalPadding,
-                ).align(Alignment.Center).offset(
-                    x = 0.dp,
-                    y = if (isPressed) 0.dp else (-style.offset / 2),
-                ),
+                Modifier
+                    .padding(
+                        top = style.verticalPadding,
+                        bottom = style.verticalPadding,
+                        start = style.horizontalPadding,
+                        end = style.horizontalPadding,
+                    ).align(Alignment.Center)
+                    .offset(
+                        x = 0.dp,
+                        y = if (isPressed) 0.dp else (-style.offset / 2),
+                    ),
         ) {
             Text(
                 text = text,
