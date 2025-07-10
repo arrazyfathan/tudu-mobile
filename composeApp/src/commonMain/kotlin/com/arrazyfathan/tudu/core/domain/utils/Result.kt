@@ -1,5 +1,6 @@
 package com.arrazyfathan.tudu.core.domain.utils
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 sealed interface Result<out D, out E : Error> {
@@ -46,7 +47,16 @@ data class ApiResponse<out T>(
     val status: String,
     val message: String,
     val data: T? = null,
-)
+    val paging: Paging = Paging(),
+) {
+    @Serializable
+    data class Paging(
+        @SerialName("current_page") val currentPage: Int = 0,
+        @SerialName("total_page") val totalPages: Int = 0,
+        @SerialName("total_items") val totalItems: Int = 0,
+        @SerialName("size") val size: Int = 0,
+    )
+}
 
 @Serializable
 data class ErrorResponse(
