@@ -19,17 +19,30 @@ plugins {
     alias(libs.plugins.room)
 }
 
-val versionPropertiesInputStream = FileInputStream("$rootDir/version.properties")
-val versionProperties = Properties().apply {
-    load(versionPropertiesInputStream)
-}
+val versionPropsFile = file("$rootDir/version.properties")
+val version = Properties()
+version.load(FileInputStream(versionPropsFile))
 
-val versionCodeProperty = versionProperties.getProperty("VERSION_CODE").toInt()
-val versionMajorProperty = versionProperties.getProperty("VERSION_MAJOR").toInt()
-val versionMinorProperty = versionProperties.getProperty("VERSION_MINOR").toInt()
-val versionPatchProperty = versionProperties.getProperty("VERSION_PATCH").toInt()
+val versionMajorProperty = version["VERSION_MAJOR"].toString().toInt()
+val versionMinorProperty = version["VERSION_MINOR"].toString().toInt()
+val versionPatchProperty = version["VERSION_PATCH"].toString().toInt()
+val versionBuildProperty = version["BUILD_VERSION"].toString().toInt() + 1
+val versionCodeProperty = version["VERSION_CODE"].toString().toInt()
 
-val versionNameProperty = "$versionMajorProperty.$versionMinorProperty.$versionPatchProperty"
+
+version["VERSION_MAJOR"] = versionMajorProperty.toString()
+version["VERSION_MINOR"] = versionMinorProperty.toString()
+version["VERSION_PATCH"] = versionPatchProperty.toString()
+version["BUILD_VERSION"] = versionBuildProperty.toString()
+version["VERSION_CODE"] = versionCodeProperty.toString()
+
+val versionNameProperty =
+    "${versionMajorProperty}.${versionMinorProperty}.${versionPatchProperty}"
+
+val versionNameWithBuild =
+    "${versionMajorProperty}.${versionMinorProperty}.${versionPatchProperty}.${versionBuildProperty}"
+
+version.store(versionPropsFile.writer(), null)
 
 kotlin {
     compilerOptions {
@@ -170,11 +183,7 @@ room {
 dependencies {
     debugImplementation(compose.uiTooling)
     listOf(
-        "kspAndroid",
-        "kspIosArm64",
-        "kspIosX64",
-        "kspIosSimulatorArm64",
-        "kspDesktop"
+        "kspAndroid", "kspIosArm64", "kspIosX64", "kspIosSimulatorArm64", "kspDesktop"
     ).forEach { target ->
         add(configurationName = target, dependencyNotation = libs.androidx.room.compiler)
     }
