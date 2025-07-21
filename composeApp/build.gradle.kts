@@ -39,9 +39,6 @@ version["VERSION_CODE"] = versionCodeProperty.toString()
 val versionNameProperty =
     "${versionMajorProperty}.${versionMinorProperty}.${versionPatchProperty}"
 
-val versionNameWithBuild =
-    "${versionMajorProperty}.${versionMinorProperty}.${versionPatchProperty}.${versionBuildProperty}"
-
 version.store(versionPropsFile.writer(), null)
 
 kotlin {
@@ -238,7 +235,7 @@ buildkonfig {
     defaultConfigs("development") {
         buildConfigField(FieldSpec.Type.STRING, "APP_NAME", "Tudu")
         buildConfigField(FieldSpec.Type.STRING, "DEFAULT_BASE_URL", "http://localhost:3000")
-        buildConfigField(FieldSpec.Type.STRING, "APP_VERSION_NAME", "$versionNameProperty-dev")
+        buildConfigField(FieldSpec.Type.STRING, "APP_VERSION_NAME", "$versionNameProperty-dev [$versionBuildProperty]")
     }
 
     defaultConfigs("production") {
