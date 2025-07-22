@@ -1,0 +1,103 @@
+default_platform(:android)
+
+platform(:android) do
+  # Define app configurations for different flavors
+  APP_CONFIGS = {
+    "developmentDebug" => {
+      app_id: "1:543817636634:android:621eac93a96151e0b3aaa3", # For com.arrazyfathan.tudu.dev
+      apk_pattern: "**/outputs/apk/development/debug/*.apk"
+    },
+    "productionDebug" => {
+      app_id: "1:543817636634:android:669f7f10d8fa4a48b3aaa3", # For com.arrazyfathan.tudu
+      apk_pattern: "**/outputs/apk/production/debug/*.apk"
+    },
+    "productionRelease" => {
+      app_id: "1:543817636634:android:669f7f10d8fa4a48b3aaa3", # For com.arrazyfathan.tudu
+      apk_pattern: "**/outputs/apk/production/release/*.apk"
+    }
+  }
+
+  private_lane :build_variant do |options|
+    build_type = options[:build_type]
+    gradle(
+      task: "assemble",
+      build_type: build_type,
+      project_dir: "../"
+    )
+  end
+
+  private_lane :deploy_variant do |options|
+    build_type = options[:build_type]
+    # Get app configuration based on build type
+    config = APP_CONFIGS[build_type]
+
+    if config.nil?
+      UI.user_error!("No configuration found for build type: #{build_type}")
+    end
+
+    # Read groups
+    groups_file = "../../groups.txt"
+    groups = ""
+    if File.exist?(groups_file)
+      groups = File.read(groups_file)
+                   .split(/\r?\n/)
+                   .reject(&:empty?)
+                   .join(",")
+    end
+
+    # Read testers (optional)
+    testers_file = "../../testers.txt"
+    testers = ""
+    if File.exist?(testers_file)
+      testers = File.read(testers_file)
+                    .split(/\r?\n/)
+                    .reject(&:empty?)
+                    .join(",")
+    end
+
+    # Find APK with more specific pattern
+    project_dir = File.expand_path("../", Dir.pwd)
+    apk_path = Dir[File.join(project_dir, config[:apk_pattern])].first
+
+    if apk_path.nil? || !File.exist?(apk_path)
+      UI.user_error!("APK not found at pattern: #{config[:apk_pattern]}")
+    end
+
+    UI.message("Found APK at: #{apk_path}")
+
+    # Read release notes
+    release_notes_file = "../../release_notes.txt"
+    release_notes = File.exist?(release_notes_file) ? File.read(release_notes_file) : "New build"
+
+    firebase_app_distribution(
+      app: config[:app_id],
+      firebase_cli_token: ENV["FIREBASE_TOKEN"],
+      android_artifact_type: "APK",
+      android_artifact_path: apk_path,
+      release_notes: release_notes,
+      testers: testers.empty? ? nil : testers,
+      groups: groups.empty? ? nil : groups,
+    )
+  end
+
+  lane :upload_dev_to_firebase do
+    build_variant(build_type: "developmentDebug")
+    deploy_variant(build_type: "developmentDebug")
+  end
+
+  lane :upload_prod_debug_to_firebase do
+    build_variant(build_type: "productionDebug")
+    deploy_variant(build_type: "productionDebug")
+  end
+
+  lane :upload_prod_release_to_firebase do
+    build_variant(build_type: "productionRelease")
+    deploy_variant(build_type: "productionRelease")
+  end
+
+  # Legacy lane name (keeping for compatibility)
+  lane :upload_prod_to_firebase do
+    build_variant(build_type: "productionDebug")
+    deploy_variant(build_type: "productionDebug")
+  end
+end

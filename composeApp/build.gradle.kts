@@ -3,6 +3,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -160,9 +161,52 @@ android {
     }
     buildTypes {
         getByName("release") {
+            isMinifyEnabled = true
+            isDebuggable = false
+        }
+
+        getByName("debug") {
             isMinifyEnabled = false
+            isDebuggable = true
         }
     }
+
+    flavorDimensions += "version"
+    productFlavors {
+        create("development") {
+            dimension = "version"
+            versionNameSuffix = "-dev"
+            applicationIdSuffix = ".dev"
+
+            val appName = "Tudu-dev-$versionNameProperty"
+            manifestPlaceholders["appName"] = "Tudu - Development"
+
+            val apkName = "${appName}_$versionNameProperty$versionNameSuffix($versionCodeProperty).apk"
+
+            buildOutputs.all {
+                val variantOutputImpl = this as BaseVariantOutputImpl
+                variantOutputImpl.outputFileName =  apkName
+            }
+        }
+
+        create("production") {
+            dimension = "version"
+            versionNameSuffix = "-prod"
+
+            val appName = "Tudu-$versionNameProperty"
+            manifestPlaceholders["appName"] = "Tudu"
+
+            val apkName = "${appName}_$versionNameProperty$versionNameSuffix($versionCodeProperty).apk"
+
+            buildOutputs.all {
+                val variantOutputImpl = this as BaseVariantOutputImpl
+                variantOutputImpl.outputFileName =  apkName
+            }
+        }
+    }
+
+
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
