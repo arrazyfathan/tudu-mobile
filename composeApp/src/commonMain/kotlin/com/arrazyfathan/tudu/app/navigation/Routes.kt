@@ -29,4 +29,10 @@ sealed interface Routes {
 
     @Serializable
     data object Profile : Routes
+
+    @Serializable
+    data object JournalGraph : Routes
+
+    @Serializable
+    data object Journal : Routes
 }

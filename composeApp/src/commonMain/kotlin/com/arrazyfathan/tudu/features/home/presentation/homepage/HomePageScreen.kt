@@ -226,8 +226,8 @@ fun HomePageContent(
                     ) {
                         FloatingActionContainer(buttons, onActionSelected = { button ->
                             when (button) {
-                                FloatingButton.NewJournal -> {}
-                                FloatingButton.Search -> {}
+                                FloatingButton.NewJournal -> onAction(HomeAction.OnCreateNewJournal)
+                                FloatingButton.Search -> onAction(HomeAction.OnSearch)
                             }
                         })
                     }

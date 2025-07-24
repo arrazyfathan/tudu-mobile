@@ -34,9 +34,7 @@ class HomePageViewModel(
 
     fun onAction(action: HomeAction) {
         when (action) {
-            HomeAction.OnCreateNewJournal -> {
-            }
-
+            HomeAction.OnCreateNewJournal -> Unit
             HomeAction.OnLogout -> logout()
             HomeAction.OnProfileClick -> {}
             HomeAction.OnSearch -> {}
