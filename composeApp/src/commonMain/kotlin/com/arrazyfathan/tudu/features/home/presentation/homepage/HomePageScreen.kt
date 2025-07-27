@@ -367,6 +367,76 @@ private fun DrawerContent(
             lineHeight = 38.sp,
         )
 
+        VerticalSpacer(50.dp)
+
+        NavigationDrawerItem(
+            label = {
+                Text(
+                    text = "Categories",
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    color = AppColors.White,
+                )
+            },
+            selected = false,
+            onClick = {},
+            icon = null,
+        )
+
+        NavigationDrawerItem(
+            label = {
+                Text(
+                    text = "Tags",
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    color = AppColors.White,
+                )
+            },
+            selected = false,
+            onClick = {},
+            icon = null,
+        )
+
+        NavigationDrawerItem(
+            label = {
+                Text(
+                    text = "Settings",
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    color = AppColors.White,
+                )
+            },
+            selected = false,
+            onClick = {},
+            icon = null,
+        )
+
+        NavigationDrawerItem(
+            label = {
+                Text(
+                    text = "About",
+                    style =
+                        MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    color = AppColors.White,
+                )
+            },
+            selected = false,
+            onClick = {},
+            icon = null,
+        )
+
         Spacer(modifier = Modifier.weight(1f))
 
         NavigationDrawerItem(
