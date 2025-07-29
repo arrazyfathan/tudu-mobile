@@ -35,4 +35,22 @@ sealed interface Routes {
 
     @Serializable
     data object Journal : Routes
+
+    @Serializable
+    data object AboutGraph : Routes
+
+    @Serializable
+    data object About : Routes
+
+    @Serializable
+    data object CategoryGraph : Routes
+
+    @Serializable
+    data object Category : Routes
+
+    @Serializable
+    data object TagGraph : Routes
+
+    @Serializable
+    data object Tag : Routes
 }
