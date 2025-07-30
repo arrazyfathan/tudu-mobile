@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.arrazyfathan.tudu.features.about.presentation.navigation.aboutGraph
 import com.arrazyfathan.tudu.features.auth.presentation.navigation.authGraph
 import com.arrazyfathan.tudu.features.home.presentation.navigation.homeGraph
 import com.arrazyfathan.tudu.features.journal.presentation.navigation.journalGraph
@@ -40,5 +41,6 @@ fun NavigationRoot(
         homeGraph(navController)
         profileGraph(navController)
         journalGraph(navController)
+        aboutGraph(navController)
     }
 }
