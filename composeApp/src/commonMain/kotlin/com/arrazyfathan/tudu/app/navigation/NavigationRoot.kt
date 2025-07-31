@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.arrazyfathan.tudu.features.about.presentation.navigation.aboutGraph
 import com.arrazyfathan.tudu.features.auth.presentation.navigation.authGraph
+import com.arrazyfathan.tudu.features.category.presentation.navigation.categoryGraph
 import com.arrazyfathan.tudu.features.home.presentation.navigation.homeGraph
 import com.arrazyfathan.tudu.features.journal.presentation.navigation.journalGraph
 import com.arrazyfathan.tudu.features.onboarding.presentation.navigation.onboardingGraph
@@ -42,5 +43,6 @@ fun NavigationRoot(
         profileGraph(navController)
         journalGraph(navController)
         aboutGraph(navController)
+        categoryGraph(navController)
     }
 }
