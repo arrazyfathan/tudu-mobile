@@ -34,6 +34,7 @@ fun TuduAppBar(
                 navigationIconContentColor = Color.Black,
                 titleContentColor = Color.Black,
                 actionIconContentColor = Color.Black,
+                subtitleContentColor = Color.Black,
             ),
     )
 }
