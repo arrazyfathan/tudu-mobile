@@ -7,13 +7,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.arrazyfathan.tudu.app.navigation.NavigationRoot
 import com.arrazyfathan.tudu.app.navigation.Routes
 import com.arrazyfathan.tudu.core.ui.AppColors
 import com.arrazyfathan.tudu.core.ui.TuduTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable

@@ -62,7 +62,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            freeCompilerArgs += listOf<String>("-Xbinary=bundleId=com.arrazyfathan.Tudu")
+            freeCompilerArgs += listOf("-Xbinary=bundleId=com.arrazyfathan.Tudu")
         }
     }
 
@@ -72,7 +72,7 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.core.splashscreen)
 
@@ -87,12 +87,12 @@ kotlin {
             implementation(libs.firebase.crashlytics)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.runtime)
+            implementation(libs.foundation)
+            implementation(libs.material3)
+            implementation(libs.ui)
+            implementation(libs.components.resources)
+            implementation(libs.ui.tooling.preview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
@@ -222,7 +222,7 @@ room {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.ui.tooling)
     listOf(
         "kspAndroid", "kspIosArm64", "kspIosX64", "kspIosSimulatorArm64", "kspDesktop"
     ).forEach { target ->

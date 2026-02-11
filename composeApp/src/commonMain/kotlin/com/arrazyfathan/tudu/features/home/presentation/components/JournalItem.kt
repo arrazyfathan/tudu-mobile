@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.arrazyfathan.tudu.core.ui.AppColors
@@ -23,7 +24,6 @@ import com.arrazyfathan.tudu.core.ui.EditorialOldFontFamily
 import com.arrazyfathan.tudu.core.ui.VerticalSpacer
 import com.arrazyfathan.tudu.features.home.domain.model.DummyJournal
 import com.arrazyfathan.tudu.features.home.domain.model.dummyJournal
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun JournalItem(
